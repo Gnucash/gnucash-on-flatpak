@@ -16,44 +16,54 @@ However, now that it's clearly stated the packages are meant purely for
 testing unreleased features, here's how to use these scripts.
 
 1. Create the following directory structure
-
+```
 flatpak
 flatpak/src
-flatpak/build
+```
 
 2. Navigate into flatpak/src
-
+```
 cd flatpak/src
+```
 
-3. Clone this repo:  
-   git clone https://github.com/Gnucash/gnucash-on-flatpak gnucash-on-flatpak.git
+3. Clone this repo:
+```
+git clone https://github.com/Gnucash/gnucash-on-flatpak gnucash-on-flatpak.git
+```
 
-4. Clone the gnucash repo  
-   git clone https://github.com/Gnucash/gnucash gnucash.git
+4. Clone the gnucash repo
+```
+git clone https://github.com/Gnucash/gnucash gnucash.git
+```
 
-5. Clone the gnucash-docs repo  
-   git clone https://github.com/Gnucash/gnucash-docs gnucash-docs.git
+5. Clone the gnucash-docs repo
+```
+git clone https://github.com/Gnucash/gnucash-docs gnucash-docs.git
+```
 
 6. If needed copy custom.sh-sample to custom.sh and override the variables
    found in there are desired/needed (for example if your repos are in 
    another location than default, or using non-default names/branches).
 
-7. Navigate into flatpak build
+7. Navigate into root directory
+```
+cd ..
+```
 
-cd ../build
+8. Build the application using the following command and add the fresh build into a local flatpak repository
+```
+flatpak-builder --repo=repo --force-clean build src/gnucash-on-flatpak.git/org.gnucash.GnuCash.json
 
-8. Run the following command
+## Notes ##
 
-flatpak-builder flatpak ../src/gnucash-on-flatpak.git/org.gnucash.GnuCash.json
+* The script will only build the packages if there are changes in the source
+  repositories since the last build.
 
-TODO
+## TODO ##
 - complete instructions as the code evolves
 - goal is to make a wrapper around flatpak-builder that will automatically trigger
   new builds only when any of the source repos changes
 - documentation is not included in the build yet
 - finance::quote support is equally missing still
 
-## Notes ##
 
-* The script will only build the packages if there are changes in the source
-  repositories since the last build.
