@@ -1,0 +1,17 @@
+# If you want to override any of the variables below,
+# rename a copy of this file to custom.sh and uncomment
+# the variables you wish to override
+#
+# ATTENTION: if you override a variable which another variable
+#            depends on, you have to uncomment that variable as
+#            well (eg: if you change code_refspec you should also
+#            uncomment flatpak_repo). That's a limiation of how
+#            the script is written.
+#
+#code_package=gnucash
+#docs_package=gnucash-docs
+#code_repodir=../${code_package}-copr
+#docs_repodir=../${docs_package}-copr
+#code_refspec=master
+#docs_refspec=master
+#flatpak_repo=${code_package}-${code_refspec}
