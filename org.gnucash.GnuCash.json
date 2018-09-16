@@ -386,7 +386,7 @@
         {
           "type": "git",
           "path": "/home/janssege/Development/gnucash/flatpak/src/gnucash.git",
-	  "branch": "maint"
+	  "branch": "{code_branch}"
         }
       ]
     }
