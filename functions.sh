@@ -28,7 +28,7 @@ function get_versions()
 function create_manifest()
 {
   echo "Writing org.gnucash.GnuCash.json manifest file"
-  cp $fp_git_dir/org.gnucash.GnuCash.json $base_dir/org.gnucash.GnuCash.json
-  perl -pi.bak -e "s!{code_branch}!$code_refspec!" $base_dir/org.gnucash.GnuCash.json
-#  perl -pi.bak -e "s!@docs_branch@!$docs_refspec!" $base_dir/org.gnucash.GnuCash.json
+  cp "$fp_git_dir"/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{code_branch}!$code_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{docs_branch}!$docs_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
 }

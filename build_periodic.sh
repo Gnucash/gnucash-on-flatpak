@@ -55,7 +55,7 @@ create_manifest
 
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
-flatpak-builder --repo=repo --force-clean --default-branch="C$code_full_version-D$docs_full_version" build "$base_dir"/org.gnucash.GnuCash.json
+flatpak-builder --repo=repo --force-clean --default-branch="C$code_full_version-D$docs_full_version" build "$fp_git_dir"/org.gnucash.GnuCash.json
 
 echo -n $code_curr_rev > "$base_dir"/code_last_rev
 echo -n $docs_curr_rev > "$base_dir"/docs_last_rev
