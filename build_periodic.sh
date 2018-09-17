@@ -28,6 +28,12 @@ revision=${revision:=$default_revision}
 revision=${revision:=$revision}
 fp_repo=${fp_repo=$default_fp_repo}
 
+# Set up logging
+mkdir -p "$base_dir/logs"
+time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
+log_file="$base_dir/logs/build-$revision-$time_stamp.log"
+exec > >(tee "$log_file") 2>&1
+
 . "$fp_git_dir"/functions.sh
 
 # Check for new commits in code
