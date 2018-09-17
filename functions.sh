@@ -2,9 +2,15 @@ function prepare_repo()
 {
   pushd "${repodir}"
   echo "Update repository $repodir"
-  git checkout $refspec
   git fetch
-  git reset --hard origin/$refspec
+  git checkout $refspec
+  if git tag | grep -q "^$refspec\$"
+  then
+    echo "Detected a tag (release) build"
+  else
+    echo "No tag detected, assuming development build"
+    git reset --hard origin/$refspec
+  fi
   popd
 }
 
