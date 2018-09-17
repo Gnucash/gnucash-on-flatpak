@@ -56,13 +56,15 @@ else
     flatpak_branch="$revision-C$code_full_version-D$docs_full_version"
 fi
 
-touch "$base_dir"/last_built_rev
-last_built_rev=$(cat "$base_dir"/last_built_rev)
-
-if [[ "$flatpak_branch" == "$last_built_rev" ]]
+echo "Checking for existing build of revision $flatpak_branch"
+# The command below will print an error on first run as the repo doesn't exist yet
+# You can safely ignore the error message
+if flatpak repo repo --branches | grep -qP "/$flatpak_branch\t"
 then
-    echo "No changes - exiting"
+    echo "Nothing to do: build already in repo"
     exit 0
+else
+    echo "Branch $flatpak_branch not found in repo, starting build"
 fi
 
 # Create the flatpak manifest
@@ -71,7 +73,4 @@ create_manifest
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
 flatpak-builder --repo=repo --force-clean --default-branch="$flatpak_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
-
-echo -n $flatpak_branch > "$base_dir"/last_built_rev
-
 # Optional code to upload
