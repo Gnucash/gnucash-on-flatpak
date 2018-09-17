@@ -29,6 +29,8 @@ function create_manifest()
 {
   echo "Writing org.gnucash.GnuCash.json manifest file"
   cp "$fp_git_dir"/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{code_repo}!$code_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{docs_repo}!$docs_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{code_branch}!$code_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{docs_branch}!$docs_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
 }

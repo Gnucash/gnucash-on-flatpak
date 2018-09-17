@@ -385,8 +385,18 @@
       "sources": [
         {
           "type": "git",
-          "path": "/home/janssege/Development/gnucash/flatpak/src/gnucash.git",
-	  "branch": "{code_branch}"
+          "path": "{code_repo}",
+          "branch": "{code_branch}"
+        }
+      ]
+    },
+    {
+      "name": "gnucash-docs",
+      "sources": [
+        {
+          "type": "git",
+          "path": "{docs_repo}",
+          "branch": "{docs_branch}"
         }
       ]
     }

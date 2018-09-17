@@ -63,7 +63,6 @@ flatpak-builder --repo=repo --force-clean build src/gnucash-on-flatpak.git/org.g
 - complete instructions as the code evolves
 - goal is to make a wrapper around flatpak-builder that will automatically trigger
   new builds only when any of the source repos changes
-- documentation is not included in the build yet
-- finance::quote support is equally missing still
+- finance::quote support is missing still
 
 
