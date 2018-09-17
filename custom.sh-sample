@@ -20,5 +20,9 @@
 #docs_package=gnucash-docs
 #code_repodir=${base_dir}/src/${code_package}.git
 #docs_repodir=${base_dir}/src/${docs_package}.git
-#code_refspec=maint
-#docs_refspec=maint
+
+# Revision to build from.
+# The build will always try to check out the same revision
+# in the gnucash and gnucash-docs repository
+# So make sure you use a branch or tag that exists in both repos
+#revision=maint

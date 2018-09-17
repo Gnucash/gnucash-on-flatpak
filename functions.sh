@@ -3,13 +3,13 @@ function prepare_repo()
   pushd "${repodir}"
   echo "Update repository $repodir"
   git fetch
-  git checkout $refspec
-  if git tag | grep -q "^$refspec\$"
+  git checkout $revision
+  if git tag | grep -q "^$revision\$"
   then
     echo "Detected a tag (release) build"
   else
     echo "No tag detected, assuming development build"
-    git reset --hard origin/$refspec
+    git reset --hard origin/$revision
   fi
   popd
 }
@@ -37,6 +37,6 @@ function create_manifest()
   cp "$fp_git_dir"/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{code_repo}!$code_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{docs_repo}!$docs_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{code_branch}!$code_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{docs_branch}!$docs_refspec!" "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{code_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
+  perl -pi -e "s!{docs_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
 }
