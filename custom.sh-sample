@@ -26,3 +26,7 @@
 # in the gnucash and gnucash-docs repository
 # So make sure you use a branch or tag that exists in both repos
 #revision=maint
+
+# Target flatpak repository in which the builds will be stored
+# This a local repository.
+#fp_repo=repo

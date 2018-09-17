@@ -10,6 +10,7 @@ default_docs_package=gnucash-docs
 default_code_repodir="${default_base_dir}"/src/${default_code_package}.git
 default_docs_repodir="${default_base_dir}"/src/${default_docs_package}.git
 default_revision=maint
+default_fp_repo=repo
 
 # Read user parameter settings
 if [ -f "$fp_git_dir"/custom.sh ]
@@ -25,6 +26,7 @@ code_repodir="${code_repodir:=$default_code_repodir}"
 docs_repodir="${docs_repodir:=$default_docs_repodir}"
 revision=${revision:=$default_revision}
 revision=${revision:=$revision}
+fp_repo=${fp_repo=$default_fp_repo}
 
 . "$fp_git_dir"/functions.sh
 
@@ -59,7 +61,7 @@ fi
 echo "Checking for existing build of revision $flatpak_branch"
 # The command below will print an error on first run as the repo doesn't exist yet
 # You can safely ignore the error message
-if flatpak repo repo --branches | grep -qP "/$flatpak_branch\t"
+if flatpak repo $fp_repo --branches | grep -qP "/$flatpak_branch\t"
 then
     echo "Nothing to do: build already in repo"
     exit 0
@@ -72,5 +74,5 @@ create_manifest
 
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
-flatpak-builder --repo=repo --force-clean --default-branch="$flatpak_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
+flatpak-builder --repo=$fp_repo --force-clean --default-branch="$flatpak_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
 # Optional code to upload
