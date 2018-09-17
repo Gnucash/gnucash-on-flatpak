@@ -1,5 +1,6 @@
 #! /bin/bash
-set -ex
+set -e
+#set -x
 
 # Set up default parameters
 fp_git_dir="$(dirname "$0")"
