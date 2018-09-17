@@ -1,21 +1,30 @@
 #! /bin/bash
 set -ex
 
+# Set up default parameters
 fp_git_dir="$(dirname "$0")"
-base_dir="$fp_git_dir/../.."
+default_base_dir="$(realpath -L "$fp_git_dir/../..")"
+default_code_package=gnucash
+default_docs_package=gnucash-docs
+default_code_repodir="${default_base_dir}"/src/${default_code_package}.git
+default_docs_repodir="${default_base_dir}"/src/${default_docs_package}.git
+default_code_refspec=maint
+default_docs_refspec=${default_code_refspec}
 
-code_package=gnucash
-docs_package=gnucash-docs
-code_repodir="${base_dir}"/src/${code_package}.git
-docs_repodir="${base_dir}"/src/${docs_package}.git
-code_refspec=maint
-docs_refspec=${code_refspec}
-flatpak_repo=${code_package}-${code_refspec}
-
+# Read user parameter settings
 if [ -f "$fp_git_dir"/custom.sh ]
 then
   . "$fp_git_dir"/custom.sh
 fi
+
+# Apply defaults for all parameters the user didn't explicitly set
+base_dir=${base_dir:=$default_base_dir}
+code_package=${code_package:=$default_code_package}
+docs_package=${docs_package:=$default_docs_package}
+code_repodir="${code_repodir:=$default_code_repodir}"
+docs_repodir="${docs_repodir:=$default_docs_repodir}"
+code_refspec=${code_refspec:=$default_code_refspec}
+docs_refspec=${docs_refspec:=$default_docs_refspec}
 
 . "$fp_git_dir"/functions.sh
 
