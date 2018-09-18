@@ -20,6 +20,14 @@ function usage()
   exit 1
 }
 
+function upload_build_log()
+{
+  if [[ -n "$host" ]]
+  then
+    rsync -a "$log_file" "$host"/build-logs
+  fi
+}
+
 function prepare_repo()
 {
   pushd "${repodir}"
@@ -29,6 +37,7 @@ function prepare_repo()
   if git tag | grep -q "^$revision\$"
   then
     echo "Detected a tag (release) build"
+    is_release="yes"
   else
     echo "No tag detected, assuming development build"
     git reset --hard origin/$revision

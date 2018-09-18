@@ -51,17 +51,28 @@ while getopts "hr:u:" o; do
     esac
 done
 
+is_release="no"
+
 # Set up logging
 mkdir -p "$base_dir/logs"
 time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
 log_file="$base_dir/logs/build-$revision-$time_stamp.log"
 exec > >(tee "$log_file") 2>&1
 
-echo "Starting flatpak build run for $revision"
 if [[ -n "$host" ]]
 then
-  rsync -a "$log_file" "$host"/build-logs
+  # Bootstrap initial directory structure on the host
+  # This will be a noop if the structure already exists
+  mkdir fake
+  rsync -a fake/ "$host"
+  rsync -a fake/ "$host"/build-logs
+  rsync -a fake/ "$host"/manifests
+  rmdir fake
 fi
+
+  # Upload inital build log so everyone knows the build has started
+echo "Starting flatpak build run for $revision"
+upload_build_log
 
 # Check for new commits in code
 package=${code_package}
@@ -97,6 +108,7 @@ echo "Checking for existing build of revision $flatpak_branch"
 if flatpak repo $fp_repo --branches | grep -qP "/$flatpak_branch\t"
 then
     echo "Nothing to do: build already in repo"
+    upload_build_log
     exit 0
 else
     echo "Branch $flatpak_branch not found in repo, starting build"
@@ -112,6 +124,20 @@ flatpak-builder --repo=$fp_repo --force-clean --default-branch="$flatpak_branch"
 # Optional code to upload
 if [[ -n "$host" ]]
 then
-  rsync -a "$log_file" "$host"/build-logs
-  rsync -a $fp_repo "$host"/$fp_repo
+  mkdir fake
+  if [[ "$is_release" = "yes" ]]
+  then
+    rsync -a fake/ "$host"/releases
+    fp_ref_dir="$host"/releases
+  else
+    rsync -a fake/ "$host"/$revision
+    fp_ref_dir="$host"/$revision
+  fi
+  rmdir fake
+
+  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$flatpak_branch.json"
+  rsync -a $fp_repo "$host"
+  # Upload the flatpak ref file  -- todo
 fi
+
+upload_build_log
