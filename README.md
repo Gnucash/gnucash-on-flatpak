@@ -13,7 +13,8 @@ Again: these packages are not release quality for several reasons:
    make dist(check) on the source repository.
 
 However, now that it's clearly stated the packages are meant purely for
-testing unreleased features, here's how to use these scripts.
+testing unreleased features, here's how to use these scripts. In the following recipe
+we will use "flatpak" as the **base directory** in which everything will happen.
 
 1. Create the following directory structure
 ```
@@ -42,17 +43,62 @@ git clone https://github.com/Gnucash/gnucash-docs gnucash-docs.git
 ```
 
 6. If needed copy custom.sh-sample to custom.sh and override the variables
-   found in there are desired/needed (for example if your repos are in 
-   another location than default, or using non-default names/branches).
+   found in there are desired/needed (for example if your repos are in
+   a location other than the defaults).
 
-7. Navigate into root directory
+7. Navigate back to the base directory (flatpak in our set up)
 ```
 cd ..
 ```
 
-8. Build the application using the following command and add the fresh build into a local flatpak repository
+8. Build the flatpak using the build_package.sh command. If no options are set this command
+will build the maint branch of your gnucash and gnucash-docs repositories.
 ```
-flatpak-builder --repo=repo --force-clean build src/gnucash-on-flatpak.git/org.gnucash.GnuCash.json
+./src/gnucash-on-flatpak.git/build_package.sh
+
+9. On successful completion you will now have a flatpak repo named "repo" in the flatpak
+base directory. You can install and run gnucash from this directory using the typical flatpak
+commands:
+```
+$ flatpak --user remote-add --no-gpg-verify gnc-testing-repo repo
+$ flatpak --user install gnc-testing-repo org.gnucash.GnuCash
+$ flatpak run org.gnucash.GnuCash
+```
+
+Note one has to specify --no-gpg-verify because the builds are not signed.
+
+## Flatpak branches ##
+
+The build script will try to avoid double work. For that it will check the commit hashes
+for the given revision (maint by default of not revision is passed to the build script).
+If a build already exists for the combination of the gnucash and gnucash-docs commit hashes
+no new build will be started.
+
+For new combinations it will start a new build and add it in the flatpak repository. To allow
+the user to select a specific build, each new build will be stored with a unique branch name.
+
+For release builds (that is, builds starting from a tag) the branch will be
+```/app/org.gnucash.GnuCash/<arch>/<tag>```
+For example
+```/app/org/gnucash.GnuCash/x86_64/3.2```
+
+For non-release builds (like from 'maint') the branch name will be based on the git branch name
+and git descriptions of the respective commits. The git descriptions are obtained using the
+**git describe** command. So tne full branch name becomes
+```/app/org.gnucash.GnuCash/<arch>/<git branch>-C<code-desc>-D<docs-desc>```
+For example
+```/app/org/gnucash.GnuCash/x86_64/maint-C3.2-290-ga20a803c8-D3.2-21-gc817132```
+
+With these long flatpak branch branch names it's possible to refer back exactly to the
+commits in the git repositories that were used to build this flatpak from. The commit
+hash refs are the bit after the -g. In the example above the code was built from commit
+a20a803c8 and the docs from commit c817132. The rest of the description give a relative
+indication of the freshness of each branch. "C3.2-290" means the code commit was 290 commits
+more recent than the 3.2 tag in the gnucash repository. "D3.2-21" means the docs commit was
+21 commits more recent than the 3.2 tag in the gnucash-docs repository. The exact numbers
+are not important. But C3.2-312 would be a more recent build than C3.2-290. So these
+numbers are used to sort builds by how recent they are (in terms of how recent the source
+is they were built from).
 
 ## Notes ##
 
@@ -60,9 +106,8 @@ flatpak-builder --repo=repo --force-clean build src/gnucash-on-flatpak.git/org.g
   repositories since the last build.
 
 ## TODO ##
-- complete instructions as the code evolves
-- goal is to make a wrapper around flatpak-builder that will automatically trigger
-  new builds only when any of the source repos changes
-- finance::quote support is missing still
+- add finance::quote support
+- properly handle release builds (should be run from release tarball)
+- sign builds
 
 
