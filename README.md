@@ -175,5 +175,6 @@ flatpak environment.
 ## TODO ##
 - add finance::quote support
 - properly handle release builds (should be run from release tarball)
+- try to build gnucash-docs as an extension instead of directly in the main flatpak
 
 
