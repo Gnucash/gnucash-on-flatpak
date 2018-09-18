@@ -24,3 +24,24 @@
 # Target flatpak repository in which the builds will be stored
 # This a local repository.
 #fp_repo=repo
+
+# Parameters used for signing the repo and builds
+# The fingerprint of the key to use:
+#gpg_key=
+# The directory where keys are stored. If left empty
+# the key is searched for in the system default gpg locations
+#gpg_dir=
+
+# An optional remote location to upload the local build results to.
+# This comes in two parts:
+# - "host" is how the build server sees this remote location.
+# - "host_public" is how external guests can reach this upload location
+#
+# host can take any form understood by the rsync tool:
+# - a local path
+# - an ssh host spec in the form user@host:path
+# If unset uploading will be skipped completely
+#
+# host_public is either an http(s) url or a local file:///abs_path uri
+#host=
+#host_public=

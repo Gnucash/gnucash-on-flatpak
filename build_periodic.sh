@@ -9,8 +9,11 @@ default_code_package=gnucash
 default_docs_package=gnucash-docs
 default_code_repodir="${default_base_dir}"/src/${default_code_package}.git
 default_docs_repodir="${default_base_dir}"/src/${default_docs_package}.git
-default_revision=maint
 default_fp_repo=repo
+host=
+host_public=
+gpg_key=
+gpg_dir=
 
 # Read options set via custom.sh
 if [ -f "$fp_git_dir"/custom.sh ]
@@ -29,18 +32,14 @@ fp_repo=${fp_repo=$default_fp_repo}
 
 # Preset defaults for options that can be passed via the command line
 revision=maint
-host=
 
 . "$fp_git_dir"/functions.sh
 
 # Parse command line options
-while getopts "hr:u:" o; do
+while getopts "hr:" o; do
     case "${o}" in
         r)
             revision=${OPTARG}
-            ;;
-        u)
-            host=${OPTARG}
             ;;
         h)
             usage
@@ -74,6 +73,8 @@ fi
 echo "Starting flatpak build run for $revision"
 upload_build_log
 
+trap cleanup ERR
+
 # Check for new commits in code
 package=${code_package}
 repodir=${code_repodir}
@@ -97,47 +98,57 @@ docs_full_version=${gc_full_version}
 # is currently written this means it only happens for release builds
 if [[ "$code_full_version" == "$docs_full_version" ]]
 then
-    flatpak_branch="$code_full_version"
+    fp_branch="$code_full_version"
 else
-    flatpak_branch="$revision-C$code_full_version-D$docs_full_version"
+    fp_branch="$revision-C$code_full_version-D$docs_full_version"
 fi
 
-echo "Checking for existing build of revision $flatpak_branch"
+echo "Checking for existing build of revision $fp_branch"
 # The command below will print an error on first run as the repo doesn't exist yet
 # You can safely ignore the error message
-if flatpak repo $fp_repo --branches | grep -qP "/$flatpak_branch\t"
+if flatpak repo $fp_repo --branches | grep -qP "/$fp_branch\t"
 then
     echo "Nothing to do: build already in repo"
     upload_build_log
     exit 0
 else
-    echo "Branch $flatpak_branch not found in repo, starting build"
+    echo "Branch $fp_branch not found in repo, starting build"
 fi
 
+# Set up gpg
+prepare_gpg
 # Create the flatpak manifest
 create_manifest
+# Create the flatpakref file
+create_flatpakref
 
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
-flatpak-builder --repo=$fp_repo --force-clean --default-branch="$flatpak_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
+flatpak-builder $gpg_parms --repo=$fp_repo --force-clean --default-branch="$fp_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
 
 # Optional code to upload
 if [[ -n "$host" ]]
 then
-  mkdir fake
-  if [[ "$is_release" = "yes" ]]
-  then
-    rsync -av fake/ "$host"/releases
-    fp_ref_dir="$host"/releases
-  else
-    rsync -av fake/ "$host"/$revision
-    fp_ref_dir="$host"/$revision
-  fi
-  rmdir fake
-
-  rsync -av "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$flatpak_branch.json"
+  rsync -av "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$fp_branch.json"
   rsync -av $fp_repo "$host"
-  # Upload the flatpak ref file  -- todo
+
+  # Upload the flatpak ref file if we created one
+  if [[ -n "$fp_ref_file" ]]
+  then
+    # Create required directory on the remote
+    mkdir fake
+    if [[ "$is_release" = "yes" ]]
+    then
+      rsync -av fake/ "$host"/releases
+      fp_ref_dir_remote="$host"/releases
+    else
+      rsync -av fake/ "$host"/$revision
+      fp_ref_dir_remote="$host"/$revision
+    fi
+    rmdir fake
+
+    rsync -av "$fp_ref_dir_local"/$fp_ref_file "$fp_ref_dir_remote"
+  fi
 fi
 
 upload_build_log

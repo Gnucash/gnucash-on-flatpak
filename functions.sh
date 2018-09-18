@@ -1,3 +1,12 @@
+function cleanup()
+{
+  if [[ -n "$host" ]]
+  then
+    upload_build_log
+  fi
+  exit
+}
+
 function usage()
 {
   {
@@ -10,12 +19,6 @@ function usage()
     echo "            Note this branch or tag should exist in both the gnucash"
     echo "            and the gnucash-docs repository used for this build."
     echo "            Default: 'maint'"
-    echo
-    echo "-u remote   an optional remote location to upload the local build results to."
-    echo "            This spec can take any form understood by the rsync tool:"
-    echo "            a local path or an ssh host spec in the form user@host:port/path"
-    echo "            If unset uploading will be skipped"
-    echo "            Default: unset"
   } 1>&2
   exit 1
 }
@@ -62,6 +65,28 @@ function get_versions()
   popd
 }
 
+function prepare_gpg()
+{
+  # gpg_parms will hold optional gpg parameters passed to flatpak commands later on
+  gpg_parms=""
+  if [[ -n "$gpg_key" ]]
+  then
+    gpg_parms="--gpg-sign=$gpg_key"
+    if [[ -n "$gpg_dir" ]]
+    then
+      gpg_home="--homedir=$gpg_dir"
+      gpg_parms="--gpg-homedir=$gpg_dir $gpg_parms"
+    fi
+    gpg2 "$gpg_home" --export $gpg_key > "$base_dir"/gnucash-flatpak.gpg
+
+    if [[ -n "$host" ]]
+    then
+      rsync -av "$base_dir"/gnucash-flatpak.gpg "$host"
+    fi
+    gpg_key64=$(base64 "$base_dir"/gnucash-flatpak.gpg | tr -d '\n')
+  fi
+}
+
 function create_manifest()
 {
   echo "Writing org.gnucash.GnuCash.json manifest file"
@@ -70,4 +95,23 @@ function create_manifest()
   perl -pi -e "s!{docs_repo}!$docs_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{code_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{docs_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
+}
+
+function create_flatpakref()
+{
+  fp_ref_file=""
+  if [[ -n "$host_public" ]] || [[ -n "$gpg_key" ]]
+  then
+    fp_ref_file=gnucash-$fp_branch.flatpakref
+    echo "Writing $fp_ref_file"
+    fp_ref_dir_local="$base_dir"/flatpakrefs
+    mkdir -p "$fp_ref_dir_local"
+    cp "$fp_git_dir"/gnucash.flatpakref.tpl "$fp_ref_dir_local"/$fp_ref_file
+    echo "Branch=$fp_branch"         >> "$fp_ref_dir_local"/$fp_ref_file
+    echo "Url=$host_public/$fp_repo" >> "$fp_ref_dir_local"/$fp_ref_file
+    echo "GPGKey=$gpg_key64" >> "$fp_ref_dir_local"/$fp_ref_file
+  else
+    echo "Mandatory variable 'host_public' or 'gpg_key' is not set."
+    echo "Skipping generation of $fp_ref_file"
+  fi
 }

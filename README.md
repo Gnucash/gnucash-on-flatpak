@@ -55,6 +55,7 @@ cd ..
 will build the maint branch of your gnucash and gnucash-docs repositories.
 ```
 ./src/gnucash-on-flatpak.git/build_package.sh
+```
 
 9. On successful completion you will now have a flatpak repo named "repo" in the flatpak
 base directory. You can install and run gnucash from this directory using the typical flatpak
@@ -78,16 +79,23 @@ For new combinations it will start a new build and add it in the flatpak reposit
 the user to select a specific build, each new build will be stored with a unique branch name.
 
 For release builds (that is, builds starting from a tag) the branch will be
-```/app/org.gnucash.GnuCash/<arch>/<tag>```
+```
+/app/org.gnucash.GnuCash/<arch>/<tag>
+```
 For example
-```/app/org/gnucash.GnuCash/x86_64/3.2```
-
+```
+/app/org/gnucash.GnuCash/x86_64/3.2
+```
 For non-release builds (like from 'maint') the branch name will be based on the git branch name
 and git descriptions of the respective commits. The git descriptions are obtained using the
 **git describe** command. So tne full branch name becomes
-```/app/org.gnucash.GnuCash/<arch>/<git branch>-C<code-desc>-D<docs-desc>```
+```
+/app/org.gnucash.GnuCash/<arch>/<git branch>-C<code-desc>-D<docs-desc>
+```
 For example
-```/app/org/gnucash.GnuCash/x86_64/maint-C3.2-290-ga20a803c8-D3.2-21-gc817132```
+```
+/app/org/gnucash.GnuCash/x86_64/maint-C3.2-290-ga20a803c8-D3.2-21-gc817132
+```
 
 With these long flatpak branch branch names it's possible to refer back exactly to the
 commits in the git repositories that were used to build this flatpak from. The commit
@@ -100,6 +108,65 @@ are not important. But C3.2-312 would be a more recent build than C3.2-290. So t
 numbers are used to sort builds by how recent they are (in terms of how recent the source
 is they were built from).
 
+## Repo and build signing ##
+
+If you want the repository and its builds to be signed, you can provide a gpg fingerprint
+via gpg_key in custom.sh. The build script will use this key to sign the build artefacts.
+If the gpg key is not stored in a location searched by default by the gpg tools, your can
+also pass a gpg_dir directory to tell the build script where to find the gpg key.
+
+Note: if your key is protected with a passphrase, you will be prompted for this passphrase
+during build. Keep this in mind if you intend to configure automated builds.
+
+## Synchronizing with a remote repository ##
+
+This is the primary use case for these scripts: build locally and then push the new builds to
+a remote repository so others can download and install these flatpaks.
+
+To enable this, two additional parameters should be set in custom.sh: host and host_public.
+The first (host) is how the build script can reach the remote location. This can be any
+valid rsync path spec, such as a local path or a path in the form user@host:path.
+
+The second (host_public) is where you expect guests to find the final flatpak repo. This is
+typically an http(s) url or if only for local use an absolute file:///path uri.
+
+## Flatpakref files ##
+
+If both gpg signing and remote repository are configure, the build script will automatically
+generate a gnucash-xyz.flatpakref file for each build. This file encapsulates all information
+to easily install a gnucash nightly flatpak in one single command:
+```
+flatpak install --from gnucash-xyz.flatpakref
+```
+This can only be set up if a GPG key and a public remote site are available.
+
+## Directory layout of a remote repository ##
+
+The remote repository will be structured as follows:
+```
+<remote_uri>
+<remote_uri>/build-logs/
+<remote_uri>/gnucash-flatpak.gpg
+<remote_uri>/<branch1>
+<remote_uri>/<branch2>
+...
+<remote_uri>/manifests
+<remote_uri>/releases
+<remote_uri>/repo
+```
+
+* **build-logs** will contain logs generated for each build
+* **gnucash-flatpak.gpg** is the public key of the gpg key used to sign the repository
+* **<branchx>** for each (git) branch in the gnucash and gnucash-docs a build was ever started
+a directroy <branchx> will be created. This directory will contain the flatpakref files for
+all the builds on that branch.
+* **releases** like the <branchx> directories, except this directory will contain the flatpakref
+files for all the release builds
+* **manifests** contains the flatpak manifest files used for each build
+* **repo** the flatpak repository for all the flatpak builds. This repository will be referenced
+by the various flatpakref files or can be used to manually add a flatpak remote to your local
+flatpak environment.
+
 ## Notes ##
 
 * The script will only build the packages if there are changes in the source
@@ -108,6 +175,5 @@ is they were built from).
 ## TODO ##
 - add finance::quote support
 - properly handle release builds (should be run from release tarball)
-- sign builds
 
 
