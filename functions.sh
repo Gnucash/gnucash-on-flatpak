@@ -1,3 +1,25 @@
+function usage()
+{
+  {
+    echo "Usage: $0 [-r <revision>] [-u <remote>]"
+    echo "       $0 -h"
+    echo
+    echo "-h          display this help message"
+    echo
+    echo "-r revision git revision to build. Can be a branch or a tag."
+    echo "            Note this branch or tag should exist in both the gnucash"
+    echo "            and the gnucash-docs repository used for this build."
+    echo "            Default: 'maint'"
+    echo
+    echo "-u remote   an optional remote location to upload the local build results to."
+    echo "            This spec can take any form understood by the rsync tool:"
+    echo "            a local path or an ssh host spec in the form user@host:port/path"
+    echo "            If unset uploading will be skipped"
+    echo "            Default: unset"
+  } 1>&2
+  exit 1
+}
+
 function prepare_repo()
 {
   pushd "${repodir}"

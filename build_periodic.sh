@@ -2,7 +2,7 @@
 set -e
 #set -x
 
-# Set up default parameters
+# Preset defaults for options that can be set via custom.sh
 fp_git_dir="$(dirname "$0")"
 default_base_dir="$(realpath -L "$fp_git_dir/../..")"
 default_code_package=gnucash
@@ -12,21 +12,44 @@ default_docs_repodir="${default_base_dir}"/src/${default_docs_package}.git
 default_revision=maint
 default_fp_repo=repo
 
-# Read user parameter settings
+# Read options set via custom.sh
 if [ -f "$fp_git_dir"/custom.sh ]
 then
   . "$fp_git_dir"/custom.sh
 fi
 
-# Apply defaults for all parameters the user didn't explicitly set
+
+# Apply defaults for all options not explicitly set in custom.sh
 base_dir=${base_dir:=$default_base_dir}
 code_package=${code_package:=$default_code_package}
 docs_package=${docs_package:=$default_docs_package}
 code_repodir="${code_repodir:=$default_code_repodir}"
 docs_repodir="${docs_repodir:=$default_docs_repodir}"
-revision=${revision:=$default_revision}
-revision=${revision:=$revision}
 fp_repo=${fp_repo=$default_fp_repo}
+
+# Preset defaults for options that can be passed via the command line
+revision=maint
+host=
+
+. "$fp_git_dir"/functions.sh
+
+# Parse command line options
+while getopts "hr:u:" o; do
+    case "${o}" in
+        r)
+            revision=${OPTARG}
+            ;;
+        u)
+            host=${OPTARG}
+            ;;
+        h)
+            usage
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
 
 # Set up logging
 mkdir -p "$base_dir/logs"
@@ -34,7 +57,11 @@ time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
 log_file="$base_dir/logs/build-$revision-$time_stamp.log"
 exec > >(tee "$log_file") 2>&1
 
-. "$fp_git_dir"/functions.sh
+echo "Starting flatpak build run for $revision"
+if [[ -n "$host" ]]
+then
+  rsync -a "$log_file" "$host"/build-logs
+fi
 
 # Check for new commits in code
 package=${code_package}
@@ -81,4 +108,10 @@ create_manifest
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
 flatpak-builder --repo=$fp_repo --force-clean --default-branch="$flatpak_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
+
 # Optional code to upload
+if [[ -n "$host" ]]
+then
+  rsync -a "$log_file" "$host"/build-logs
+  rsync -a $fp_repo "$host"/$fp_repo
+fi
