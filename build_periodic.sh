@@ -64,9 +64,9 @@ then
   # Bootstrap initial directory structure on the host
   # This will be a noop if the structure already exists
   mkdir fake
-  rsync -a fake/ "$host"
-  rsync -a fake/ "$host"/build-logs
-  rsync -a fake/ "$host"/manifests
+  rsync -av fake/ "$host"
+  rsync -av fake/ "$host"/build-logs
+  rsync -av fake/ "$host"/manifests
   rmdir fake
 fi
 
@@ -127,16 +127,16 @@ then
   mkdir fake
   if [[ "$is_release" = "yes" ]]
   then
-    rsync -a fake/ "$host"/releases
+    rsync -av fake/ "$host"/releases
     fp_ref_dir="$host"/releases
   else
-    rsync -a fake/ "$host"/$revision
+    rsync -av fake/ "$host"/$revision
     fp_ref_dir="$host"/$revision
   fi
   rmdir fake
 
-  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$flatpak_branch.json"
-  rsync -a $fp_repo "$host"
+  rsync -av "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$flatpak_branch.json"
+  rsync -av $fp_repo "$host"
   # Upload the flatpak ref file  -- todo
 fi
 

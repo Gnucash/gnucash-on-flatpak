@@ -24,7 +24,7 @@ function upload_build_log()
 {
   if [[ -n "$host" ]]
   then
-    rsync -a "$log_file" "$host"/build-logs
+    rsync -av "$log_file" "$host"/build-logs
   fi
 }
 
