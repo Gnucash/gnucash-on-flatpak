@@ -63,9 +63,9 @@ then
   # Bootstrap initial directory structure on the host
   # This will be a noop if the structure already exists
   mkdir fake
-  rsync -av fake/ "$host"
-  rsync -av fake/ "$host"/build-logs
-  rsync -av fake/ "$host"/manifests
+  rsync -a fake/ "$host"
+  rsync -a fake/ "$host"/build-logs
+  rsync -a fake/ "$host"/manifests
   rmdir fake
 fi
 
@@ -129,8 +129,9 @@ flatpak-builder $gpg_parms --repo=$fp_repo --force-clean --default-branch="$fp_b
 # Optional code to upload
 if [[ -n "$host" ]]
 then
-  rsync -av "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$fp_branch.json"
-  rsync -av $fp_repo "$host"
+  echo "Uploading flatpak manifest 'org.gnucash.GnuCash-$fp_branch.json' and synchronizing repository"
+  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$fp_branch.json"
+  rsync -a $fp_repo "$host"
 
   # Upload the flatpak ref file if we created one
   if [[ -n "$fp_ref_file" ]]
@@ -139,15 +140,16 @@ then
     mkdir fake
     if [[ "$is_release" = "yes" ]]
     then
-      rsync -av fake/ "$host"/releases
+      rsync -a fake/ "$host"/releases
       fp_ref_dir_remote="$host"/releases
     else
-      rsync -av fake/ "$host"/$revision
+      rsync -a fake/ "$host"/$revision
       fp_ref_dir_remote="$host"/$revision
     fi
     rmdir fake
 
-    rsync -av "$fp_ref_dir_local"/$fp_ref_file "$fp_ref_dir_remote"
+    echo "Uploading flatpakref file '$fp_ref_file'"
+    rsync -a "$fp_ref_dir_local"/$fp_ref_file "$fp_ref_dir_remote"
   fi
 fi
 

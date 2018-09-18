@@ -27,7 +27,8 @@ function upload_build_log()
 {
   if [[ -n "$host" ]]
   then
-    rsync -av "$log_file" "$host"/build-logs
+    echo "Uploading log file '$log_file'"
+    rsync -a "$log_file" "$host"/build-logs
   fi
 }
 
@@ -81,7 +82,8 @@ function prepare_gpg()
 
     if [[ -n "$host" ]]
     then
-      rsync -av "$base_dir"/gnucash-flatpak.gpg "$host"
+      echo "Uploading GPG public key 'gnucash-flatpak.gpg'"
+      rsync -a "$base_dir"/gnucash-flatpak.gpg "$host"
     fi
     gpg_key64=$(base64 "$base_dir"/gnucash-flatpak.gpg | tr -d '\n')
   fi
