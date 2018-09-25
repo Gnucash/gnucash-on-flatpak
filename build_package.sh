@@ -99,8 +99,11 @@ docs_full_version=${gc_full_version}
 if [[ "$code_full_version" == "$docs_full_version" ]]
 then
     fp_branch="$code_full_version"
+    build_type=tar
+    get_checksums
 else
     fp_branch="$revision-C$code_full_version-D$docs_full_version"
+    build_type=git
 fi
 
 echo "Checking for existing build of revision $fp_branch"

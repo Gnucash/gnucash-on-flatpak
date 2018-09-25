@@ -66,6 +66,13 @@ function get_versions()
   popd
 }
 
+function get_checksums()
+{
+  wget "http://downloads.sourceforge.net/gnucash/gnucash (stable)/${revision}/README.txt" -O "${base_dir}"/README.txt
+  code_checksum=$(awk "/gnucash-${revision}.tar.bz2/ { print \$1;}" "${base_dir}"/README.txt)
+  docs_checksum=$(awk "/gnucash-docs-${revision}.tar.gz/ { print \$1;}" "${base_dir}"/README.txt)
+}
+
 function prepare_gpg()
 {
   # gpg_parms will hold optional gpg parameters passed to flatpak commands later on
@@ -94,19 +101,21 @@ function create_manifest()
   echo "Writing org.gnucash.GnuCash.json manifest file"
 
   # Export environment variables used in the templates in order for envsubst to find them
-  export code_repodir docs_repodir revision
+  export code_repodir docs_repodir code_checksum docs_checksum revision
 
+  # In the functions below build_type selects the proper templates to initiate
+  # a git or a tar build. build_type is determined earlier in build_package.sh
   extra_deps=
-  if [[ -f "$fp_git_dir"/templates/extra-deps-git.json.tpl ]]; then
-    extra_deps=$(cat "$fp_git_dir"/templates/extra-deps-git.json.tpl)
+  if [[ -f "$fp_git_dir"/templates/extra-deps-${build_type}.json.tpl ]]; then
+      extra_deps=$(cat "$fp_git_dir"/templates/extra-deps-${build_type}.json.tpl)
   fi
   gnucash_targets=
-  if [[ -f "$fp_git_dir"/templates/extra-deps-git.json.tpl ]]; then
+  if [[ -f "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl ]]; then
       # Note the variable names passed to envsubst:
       # this limits the set of variables envsubst will effectively substitute
       # We do this to prevent colisions with flatpak variables in the manifest
-      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $revision' \
-                        < "$fp_git_dir"/templates/gnucash-targets-git.json.tpl)
+      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $revision $code_checksum $docs_checksum' \
+                        < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl)
   fi
   export extra_deps gnucash_targets
 
