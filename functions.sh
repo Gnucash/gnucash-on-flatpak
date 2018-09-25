@@ -92,11 +92,30 @@ function prepare_gpg()
 function create_manifest()
 {
   echo "Writing org.gnucash.GnuCash.json manifest file"
-  cp "$fp_git_dir"/templates/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{code_repo}!$code_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{docs_repo}!$docs_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{code_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
-  perl -pi -e "s!{docs_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
+
+  # Export environment variables used in the templates in order for envsubst to find them
+  export code_repodir docs_repodir revision
+
+  extra_deps=
+  if [[ -f "$fp_git_dir"/templates/extra-deps-git.json.tpl ]]; then
+    extra_deps=$(cat "$fp_git_dir"/templates/extra-deps-git.json.tpl)
+  fi
+  gnucash_targets=
+  if [[ -f "$fp_git_dir"/templates/extra-deps-git.json.tpl ]]; then
+      # Note the variable names passed to envsubst:
+      # this limits the set of variables envsubst will effectively substitute
+      # We do this to prevent colisions with flatpak variables in the manifest
+      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $revision' \
+                        < "$fp_git_dir"/templates/gnucash-targets-git.json.tpl)
+  fi
+  export extra_deps gnucash_targets
+
+  # Note the variable names passed to envsubst:
+  # this limits the set of variables envsubst will effectively substitute
+  # We do this to prevent colisions with flatpak variables in the manifest
+  envsubst '$extra_deps $gnucash_targets' \
+           < "$fp_git_dir"/templates/org.gnucash.GnuCash.json.tpl \
+           > "$fp_git_dir"/org.gnucash.GnuCash.json
 }
 
 function create_flatpakref()
