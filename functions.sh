@@ -92,7 +92,7 @@ function prepare_gpg()
 function create_manifest()
 {
   echo "Writing org.gnucash.GnuCash.json manifest file"
-  cp "$fp_git_dir"/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
+  cp "$fp_git_dir"/templates/org.gnucash.GnuCash.json.tpl "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{code_repo}!$code_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{docs_repo}!$docs_repodir!" "$fp_git_dir"/org.gnucash.GnuCash.json
   perl -pi -e "s!{code_branch}!$revision!" "$fp_git_dir"/org.gnucash.GnuCash.json
@@ -108,7 +108,7 @@ function create_flatpakref()
     echo "Writing $fp_ref_file"
     fp_ref_dir_local="$base_dir"/flatpakrefs
     mkdir -p "$fp_ref_dir_local"
-    cp "$fp_git_dir"/gnucash.flatpakref.tpl "$fp_ref_dir_local"/$fp_ref_file
+    cp "$fp_git_dir"/templates/gnucash.flatpakref.tpl "$fp_ref_dir_local"/$fp_ref_file
     echo "Branch=$fp_branch"         >> "$fp_ref_dir_local"/$fp_ref_file
     echo "Url=$host_public/$fp_repo" >> "$fp_ref_dir_local"/$fp_ref_file
     echo "GPGKey=$gpg_key64" >> "$fp_ref_dir_local"/$fp_ref_file
