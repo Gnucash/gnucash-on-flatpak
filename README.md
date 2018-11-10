@@ -16,6 +16,14 @@ However, now that it's clearly stated the packages are meant purely for
 testing unreleased features, here's how to use these scripts. In the following recipe
 we will use "flatpak" as the **base directory** in which everything will happen.
 
+0. Install the flathub repository. This repo will provide the gnome-sdk our
+flatpak configuration is based on.
+```
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+[The flathub website](https://flatpak.org/setup/) has additional pointers
+for setting this up on various distributions.
+
 1. Create the following directory structure
 ```
 flatpak
