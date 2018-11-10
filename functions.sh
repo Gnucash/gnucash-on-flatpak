@@ -129,10 +129,9 @@ function create_manifest()
 
 function create_flatpakref()
 {
-  fp_ref_file=""
+  fp_ref_file=gnucash-$fp_branch.flatpakref
   if [[ -n "$host_public" ]] || [[ -n "$gpg_key" ]]
   then
-    fp_ref_file=gnucash-$fp_branch.flatpakref
     echo "Writing $fp_ref_file"
     fp_ref_dir_local="$base_dir"/flatpakrefs
     mkdir -p "$fp_ref_dir_local"
@@ -143,5 +142,6 @@ function create_flatpakref()
   else
     echo "Mandatory variable 'host_public' or 'gpg_key' is not set."
     echo "Skipping generation of $fp_ref_file"
+    fp_ref_file=""
   fi
 }
