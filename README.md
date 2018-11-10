@@ -79,7 +79,7 @@ Note one has to specify --no-gpg-verify because the builds are not signed.
 ## Flatpak branches ##
 
 The build script will try to avoid double work. For that it will check the commit hashes
-for the given revision (maint by default of not revision is passed to the build script).
+for the given revision (maint by default if no revision is passed to the build script).
 If a build already exists for the combination of the gnucash and gnucash-docs commit hashes
 no new build will be started.
 
@@ -96,7 +96,7 @@ For example
 ```
 For non-release builds (like from 'maint') the branch name will be based on the git branch name
 and git descriptions of the respective commits. The git descriptions are obtained using the
-**git describe** command. So tne full branch name becomes
+**git describe** command. So the full branch name becomes
 ```
 /app/org.gnucash.GnuCash/<arch>/<git branch>-C<code-desc>-D<docs-desc>
 ```
@@ -140,7 +140,7 @@ typically an http(s) url or if only for local use an absolute file:///path uri.
 
 ## Flatpakref files ##
 
-If both gpg signing and remote repository are configure, the build script will automatically
+If both gpg signing and remote repository are configured, the build script will automatically
 generate a gnucash-xyz.flatpakref file for each build. This file encapsulates all information
 to easily install a gnucash nightly flatpak in one single command:
 ```
