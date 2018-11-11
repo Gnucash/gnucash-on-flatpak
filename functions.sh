@@ -127,6 +127,18 @@ function create_manifest()
            > "$fp_git_dir"/org.gnucash.GnuCash.json
 }
 
+function setup_sdk()
+{
+    echo "Configuring flathub repository"
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+    # Extract the required sdk from the config file
+    sdk_ver=$(perl -lne 'm|"runtime-version".*"(.*)"|g&&print "$1"' "$fp_git_dir"/org.gnucash.GnuCash.json)
+    sdk_base=$(perl -lne 'm|"sdk".*"(.*)"|g&&print "$1"' "$fp_git_dir"/org.gnucash.GnuCash.json)
+    sdk=$sdk_base//$sdk_ver
+    flatpak install --user flathub $sdk
+}
+
 function create_flatpakref()
 {
   fp_ref_file=gnucash-$fp_branch.flatpakref

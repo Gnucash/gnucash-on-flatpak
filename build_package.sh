@@ -125,6 +125,9 @@ create_manifest
 # Create the flatpakref file
 create_flatpakref
 
+# Prepare build environment by installing the correct sdk
+setup_sdk
+
 # Start all necessary builds in parallel
 echo "Creating new flatpak [gnucash=$code_full_version, gnucash-docs=$docs_full_version]"
 flatpak-builder $gpg_parms --repo=$fp_repo --force-clean --default-branch="$fp_branch" build "$fp_git_dir"/org.gnucash.GnuCash.json
