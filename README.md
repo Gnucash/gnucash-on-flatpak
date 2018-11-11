@@ -13,7 +13,19 @@ Again: these packages are not release quality for several reasons:
    make dist(check) on the source repository.
 
 However, now that it's clearly stated the packages are meant purely for
-testing unreleased features, here's how to use these scripts. In the following recipe
+testing unreleased features, here's how to use these scripts.
+
+# System dependencies #
+
+To use the scripts in this repository you need the following packages installed on your system:
+
+- flatpak
+- flatpak-builder
+- gettext (for envsubst)
+- perl
+
+# Build recipe #
+In the following recipe
 we will use "flatpak" as the **base directory** in which everything will happen.
 
 1. Create the following directory structure
