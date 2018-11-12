@@ -8,7 +8,7 @@
         {
             "type": "archive",
             "url": "http://prdownloads.sourceforge.net/pcre/pcre-8.42.tar.bz2",
-            "sha1": "df0d1c2ff04c359220cb902539a6e134af4497f4"
+            "sha256": "2cd04b7c887808be030254e8d77de11d3fe9d4505c39d4b15d2664ffe8bf9301"
         }
         ]
     },
@@ -25,7 +25,7 @@
         {
           "type": "archive",
           "url": "http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz",
-          "sha1": "5cc1af41d041e4cc609580b99bb3dcf720effa25"
+          "sha256": "7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d"
         }
       ]
     },
