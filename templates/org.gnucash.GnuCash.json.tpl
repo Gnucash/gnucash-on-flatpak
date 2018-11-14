@@ -292,7 +292,7 @@
         },
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/8/gwenhywfar-4.20.0.tar.gz",
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz",
           "sha256": "5a88daabba1388f9528590aab5de527a12dd44a7da4572ce48469a29911b0fb0"
         }
       ]
