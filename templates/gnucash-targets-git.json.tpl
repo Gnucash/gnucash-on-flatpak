@@ -8,9 +8,6 @@
         "/share/info",
         "/share/doc"
       ],
-      "post-install": [
-        "sed -i 's/org.gnucash.Gnucash/org.gnucash.GnuCash/g' /app/share/metainfo/*.xml"
-      ],
       "sources": [
         {
           "type": "git",
