@@ -50,23 +50,22 @@ while getopts "hr:" o; do
     esac
 done
 
-is_release="no"
+is_release="undecided"
 
 # Set up logging
-mkdir -p "$base_dir/logs"
+local_log_dir="$base_dir/logs"
+mkdir -p "$local_log_dir"
 time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
-log_file="$base_dir/logs/build-$revision-$time_stamp.log"
-exec > >(tee "$log_file") 2>&1
+log_file="build-$revision-$time_stamp.log"
+exec > >(tee "$local_log_dir/$log_file") 2>&1
 
 if [[ -n "$host" ]]
 then
   # Bootstrap initial directory structure on the host
   # This will be a noop if the structure already exists
-  mkdir fake
-  rsync -a fake/ "$host"
-  rsync -a fake/ "$host"/build-logs
-  rsync -a fake/ "$host"/manifests
-  rmdir fake
+  rsync -a --exclude='*' "$local_log_dir"/ "$host"
+  rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs
+  rsync -a --exclude='*' "$local_log_dir"/ "$host"/manifests
 fi
 
   # Upload inital build log so everyone knows the build has started

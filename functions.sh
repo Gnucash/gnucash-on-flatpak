@@ -28,7 +28,38 @@ function upload_build_log()
   if [[ -n "$host" ]]
   then
     echo "Uploading log file '$log_file'"
-    rsync -a "$log_file" "$host"/build-logs
+    if [[ "$is_release" = "undecided" ]]
+    then
+      # We don't know the build type yet, so we can't determine
+      # the final remote directory to store it
+      # So let's just store it in the top-level
+      # This happens for the initial upload or very early failures
+      rsync -a "$local_log_dir/$log_file" "$host"/build-logs
+    else
+      # Ah, now we can determine the final path...
+      if [[ "$is_release" = "yes" ]]
+      then
+        remote_log_dir="releases"
+      else
+        remote_log_dir=$revision
+      fi
+      # In addition group per month to keep the logs manageable
+      month_part=$(date +%Y-%m)
+
+      # Hack to ensure all intermediate directories exist
+      rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs/$remote_log_dir
+      rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs/$remote_log_dir/$month_part
+
+      rsync -a "$local_log_dir/$log_file" "$host"/build-logs/$remote_log_dir/$month_part
+
+      # Finally remove the initially start build log uploaded earlier
+      # Disable fatal error handling though to prevent the complete script from exiting
+      # if no early build log exists
+      echo "Removing initial startup build log uploaded earlier"
+      set +ex
+      rsync -rv --delete --include="$log_file" --exclude='*' "$base_dir"/ "$host"/build-logs/
+      set -ex
+    fi
   fi
 }
 
@@ -44,6 +75,7 @@ function prepare_repo()
     is_release="yes"
   else
     echo "No tag detected, assuming development build"
+    is_release="no"
     git reset --hard origin/$revision
   fi
   popd
