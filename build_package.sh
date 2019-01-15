@@ -59,14 +59,9 @@ time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
 log_file="build-$revision-$time_stamp.log"
 exec > >(tee "$local_log_dir/$log_file") 2>&1
 
-if [[ -n "$host" ]]
-then
-  # Bootstrap initial directory structure on the host
-  # This will be a noop if the structure already exists
-  rsync -a --exclude='*' "$local_log_dir"/ "$host"
-  rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs
-  rsync -a --exclude='*' "$local_log_dir"/ "$host"/manifests
-fi
+# Create the base directory on the host where all generated files will be uploaded to.
+# This will be a noop if either no host is set or the directory already exists
+create_remote_dir "$host"
 
   # Upload inital build log so everyone knows the build has started
 echo "Starting flatpak build run for $revision"
@@ -134,27 +129,20 @@ flatpak-builder $gpg_parms --repo=$fp_repo --force-clean --default-branch="$fp_b
 # Optional code to upload
 if [[ -n "$host" ]]
 then
-  echo "Uploading flatpak manifest 'org.gnucash.GnuCash-$fp_branch.json' and synchronizing repository"
-  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/org.gnucash.GnuCash-$fp_branch.json"
+  echo "Uploading flatpak manifest 'org.gnucash.GnuCash-$fp_branch.json'"
+  create_remote_dir "$host"/manifests
+  create_remote_dir "$host"/manifests/$remote_branch_dir
+  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/$remote_branch_dir/org.gnucash.GnuCash-$fp_branch.json"
+
+  echo "Synchronizing flatpak repository"
   rsync -a $fp_repo "$host"
 
   # Upload the flatpak ref file if we created one
   if [[ -n "$fp_ref_file" ]]
   then
-    # Create required directory on the remote
-    mkdir fake
-    if [[ "$is_release" = "yes" ]]
-    then
-      rsync -a fake/ "$host"/releases
-      fp_ref_dir_remote="$host"/releases
-    else
-      rsync -a fake/ "$host"/$revision
-      fp_ref_dir_remote="$host"/$revision
-    fi
-    rmdir fake
-
     echo "Uploading flatpakref file '$fp_ref_file'"
-    rsync -a "$fp_ref_dir_local"/$fp_ref_file "$fp_ref_dir_remote"
+    create_remote_dir "$host"/$remote_branch_dir
+    rsync -a "$fp_ref_dir_local"/$fp_ref_file "$host"/$remote_branch_dir
   fi
 fi
 

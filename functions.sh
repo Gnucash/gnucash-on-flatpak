@@ -23,34 +23,43 @@ function usage()
   exit 1
 }
 
+# This function will create a remote directory
+# It will only run if $host is configured.
+# Note it assumes the parent directory exists and it won't
+# create intermediate subdirectories if that is not the case
+function create_remote_dir()
+{
+  if [[ -n "$host" ]]
+  then
+    # For this hack $base_dir is just an arbitrary existing directory
+    # It doesn't matter which one
+    # No files will be copied from it anyway because of the exclude parameter
+    rsync -a --exclude='*' "$base_dir"/ "$1"
+  fi
+}
+
 function upload_build_log()
 {
   if [[ -n "$host" ]]
   then
     echo "Uploading log file '$log_file'"
-    if [[ "$is_release" = "undecided" ]]
+    create_remote_dir "$host"/build-logs
+    if [[ -z "$remote_branch_dir" ]]
     then
       # We don't know the build type yet, so we can't determine
       # the final remote directory to store it
-      # So let's just store it in the top-level
-      # This happens for the initial upload or very early failures
+      # So let's just store it in the top-level so we have a trace
+      # of the build start or very early failures
       rsync -a "$local_log_dir/$log_file" "$host"/build-logs
     else
-      # Ah, now we can determine the final path...
-      if [[ "$is_release" = "yes" ]]
-      then
-        remote_log_dir="releases"
-      else
-        remote_log_dir=$revision
-      fi
-      # In addition group per month to keep the logs manageable
+      # Now the subdirectory to store the log file is is known
+      # In addition group per month to simplify navigation even more
       month_part=$(date +%Y-%m)
 
-      # Hack to ensure all intermediate directories exist
-      rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs/$remote_log_dir
-      rsync -a --exclude='*' "$local_log_dir"/ "$host"/build-logs/$remote_log_dir/$month_part
+      create_remote_dir "$host"/build-logs/$remote_branch_dir
+      create_remote_dir "$host"/build-logs/$remote_branch_dir/$month_part
 
-      rsync -a "$local_log_dir/$log_file" "$host"/build-logs/$remote_log_dir/$month_part
+      rsync -a "$local_log_dir/$log_file" "$host"/build-logs/$remote_branch_dir/$month_part
 
       # Finally remove the initially start build log uploaded earlier
       # Disable fatal error handling though to prevent the complete script from exiting
@@ -73,9 +82,11 @@ function prepare_repo()
   then
     echo "Detected a tag (release) build"
     is_release="yes"
+    remote_branch_dir="releases"
   else
     echo "No tag detected, assuming development build"
     is_release="no"
+    remote_branch_dir=$revision
     git reset --hard origin/$revision
   fi
   popd
