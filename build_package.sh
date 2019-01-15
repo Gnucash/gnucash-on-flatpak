@@ -103,7 +103,7 @@ fi
 echo "Checking for existing build of revision $fp_branch"
 # The command below will print an error on first run as the repo doesn't exist yet
 # You can safely ignore the error message
-if flatpak repo $fp_repo --branches | grep -qP "/$fp_branch\t"
+if flatpak repo $fp_repo --branches | grep -q "/$fp_branch[[:space:]]"
 then
     echo "Nothing to do: build already in repo"
     upload_build_log
