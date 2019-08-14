@@ -147,3 +147,5 @@ then
 fi
 
 upload_build_log
+
+# Note: command to get revision only tags sorted by increasing rev numbers: git tag --list '[0-9].*' --sort=v:refname

@@ -303,8 +303,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/5/aqbanking-5.7.8.tar.gz",
-          "sha256": "16f86e4cc49a9eaaa8dfe3206607e627873208bce45a70030c3caea9b5afc768"
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/5/aqbanking-5.8.1.tar.gz",
+          "sha256": "af063a75ba401de3538f41cca0c7001950086b3e2d4f190ffe3ddfeea1b08454"
         }
       ]
     },
