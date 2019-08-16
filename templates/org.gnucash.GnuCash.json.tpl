@@ -258,16 +258,6 @@
       ]
     },
     {
-      "name": "ktoblzcheck",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "http://downloads.sourceforge.net/project/ktoblzcheck/ktoblzcheck-1.49.tar.gz",
-          "sha256": "e8971bc6689ea72b174c194bd43ba2c0b65112b0c3f9fd2371562e0c3ab57d29"
-        }
-      ]
-    },
-    {
       "name": "gwenhywfar",
       "config-opts": [
         "--with-guis=''"
@@ -303,7 +293,7 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/5/aqbanking-5.8.1.tar.gz",
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/105/aqbanking-5.8.1.tar.gz",
           "sha256": "af063a75ba401de3538f41cca0c7001950086b3e2d4f190ffe3ddfeea1b08454"
         }
       ]
