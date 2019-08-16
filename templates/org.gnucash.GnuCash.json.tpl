@@ -1,7 +1,7 @@
 {
   "app-id": "org.gnucash.GnuCash",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "3.28",
+  "runtime-version": "3.30",
   "sdk": "org.gnome.Sdk",
   "command": "gnucash",
   "copy-icon": true,
@@ -9,6 +9,7 @@
   "rename-desktop-file": "gnucash.desktop",
   "rename-appdata-file": "gnucash.appdata.xml",
   "finish-args": [
+    "--socket=wayland",
     "--socket=x11", "--share=ipc",
     "--share=network",
     "--filesystem=home",
@@ -30,8 +31,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "http://www.hboehm.info/gc/gc_source/gc-7.6.4.tar.gz",
-          "sha256": "b94c1f2535f98354811ee644dccab6e84a0cf73e477ca03fb5a3758fb1fecd1c"
+          "url": "http://www.hboehm.info/gc/gc_source/gc-8.0.4.tar.gz",
+          "sha256": "436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"
         }
       ]
     },
@@ -133,16 +134,24 @@
     },
     {
       "name": "libaio",
-      "buildsystem": "simple",
-      "build-commands": [
-        "make",
-        "make prefix=/app install"
+      "no-autogen": true,
+      "make-install-args": [
+        "prefix=/app"
       ],
       "sources": [
         {
           "type": "archive",
           "url": "http://ftp.de.debian.org/debian/pool/main/liba/libaio/libaio_0.3.110.orig.tar.gz",
           "sha256": "e019028e631725729376250e32b473012f7cb68e1f7275bfc1bbcdd0f8745f7e"
+        },
+        {
+          "type": "patch",
+          "paths": [
+            "link-libs.patch",
+            "fix-install-dirs.patch",
+            "no-werror.patch",
+            "fix-build-flags.patch"
+          ]
         }
       ]
     },
@@ -264,23 +273,6 @@
       ],
       "sources": [
         {
-          "type": "script",
-          "dest-filename": "libgcrypt-config",
-          "commands": [
-            "case $1 in",
-            "--version) pkg-config --modversion libgcrypt ;;",
-            "--libs) echo $(pkg-config --libs libgcrypt) -lgpg-error ;;",
-            "*) pkg-config $* libgcrypt",
-            "esac"
-          ]
-        },
-        {
-          "type": "shell",
-          "commands": [
-            "install -Dm755 libgcrypt-config /app/bin/libgcrypt-config"
-          ]
-        },
-        {
           "type": "archive",
           "url": "https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz",
           "sha256": "5a88daabba1388f9528590aab5de527a12dd44a7da4572ce48469a29911b0fb0"
@@ -311,7 +303,7 @@
       "build-commands": [
           "./bootstrap.sh --prefix=/app --with-libraries=locale,filesystem,system,date_time,regex",
           "./b2 headers",
-          "./b2 install variant=release --layout=system"
+          "./b2 -j$FLATPAK_BUILDER_N_JOBS install variant=release --layout=system"
         ]
     },
     {
