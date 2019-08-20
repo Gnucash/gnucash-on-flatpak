@@ -118,6 +118,8 @@ prepare_gpg
 create_manifest
 # Create the flatpakref file
 create_flatpakref
+# Create the flatpakrepo file
+create_flatpakrepo
 
 # Prepare build environment by installing the correct sdk
 setup_sdk
@@ -143,6 +145,14 @@ then
     echo "Uploading flatpakref file '$fp_ref_file'"
     create_remote_dir "$host"/$remote_branch_dir
     rsync -a "$fp_ref_dir_local"/$fp_ref_file "$host"/$remote_branch_dir
+  fi
+
+  # Upload the flatpakrepo file if we created one
+  if [[ -n "$fp_repo_file" ]]
+  then
+    echo "Uploading flatpakref file '$fp_repo_file'"
+    create_remote_dir "$host"
+    rsync -a "$fp_repo_dir_local"/$fp_repo_file "$host"
   fi
 fi
 

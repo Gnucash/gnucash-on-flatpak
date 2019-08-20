@@ -202,3 +202,21 @@ function create_flatpakref()
     fp_ref_file=""
   fi
 }
+
+function create_flatpakrepo()
+{
+    fp_repo_file=gnucash-nightlies.flatpakrepo
+    if [[ -n "$host_public" ]] || [[ -n "$gpg_key" ]]
+        then
+        echo "Writing $fp_repo_file"
+        fp_repo_dir_local="$base_dir"/flatpakrefs
+        mkdir -p "$fp_repo_dir_local"
+        cp "$fp_git_dir"/templates/gnucash-nightlies.flatpakrepo.tpl "$fp_repo_dir_local"/$fp_repo_file
+        echo "Url=$host_public/$fp_repo" >> "$fp_repo_dir_local"/$fp_repo_file
+        echo "GPGKey=$gpg_key64" >> "$fp_repo_dir_local"/$fp_repo_file
+    else
+        echo "Mandatory variable 'host_public' or 'gpg_key' is not set."
+        echo "Skipping generation of $fp_repo_file"
+        fp_repo_file=""
+    fi
+}
