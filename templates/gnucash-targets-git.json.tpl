@@ -6,7 +6,10 @@
       ],
       "cleanup": [
         "/share/info",
-        "/share/doc"
+        "/share/doc/*.qif",
+        "/share/doc/*.gnucash",
+        "/share/doc/ChangLog*",
+        "/share/doc/README*"
       ],
       "sources": [
         {
