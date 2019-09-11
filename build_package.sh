@@ -100,18 +100,6 @@ else
     build_type=git
 fi
 
-echo "Checking for existing build of revision $fp_branch"
-# The command below will print an error on first run as the repo doesn't exist yet
-# You can safely ignore the error message
-if flatpak repo $fp_repo --branches | grep -q "/$fp_branch[[:space:]]"
-then
-    echo "Nothing to do: build already in repo"
-    upload_build_log
-    exit 0
-else
-    echo "Branch $fp_branch not found in repo, starting build"
-fi
-
 # Set up gpg
 prepare_gpg
 # Create the flatpak manifest
