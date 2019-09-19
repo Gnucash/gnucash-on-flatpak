@@ -10,7 +10,9 @@
   "rename-appdata-file": "gnucash.appdata.xml",
   "finish-args": [
     "--socket=wayland",
-    "--socket=x11", "--share=ipc",
+    "--socket=x11",
+    "--socket=pcsc",
+    "--share=ipc",
     "--share=network",
     "--filesystem=home",
     "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
@@ -267,15 +269,42 @@
       ]
     },
     {
+      "name": "libpcsclite",
+      "config-opts": [
+        "--disable-libsystemd",
+        "--disable-serial",
+        "--disable-usb",
+        "--disable-libudev",
+        "--with-systemdsystemunitdir=no"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://pcsclite.apdu.fr/files/pcsc-lite-1.8.24.tar.bz2",
+          "sha256": "b81864fa6a5ec776639c02ae89998955f7702a8d10e8b8f70023c5a599d97568"
+        }
+      ]
+    },
+    {
       "name": "gwenhywfar",
       "config-opts": [
-        "--with-guis=''"
+        "--with-guis='gtk3'"
       ],
       "sources": [
         {
           "type": "archive",
           "url": "https://www.aquamaniac.de/rdm/attachments/download/136/gwenhywfar-4.99.15beta.tar.gz",
           "sha256": "2a78b26f556688ad8f40c8727a8ec54c214746981ab83b539bd6a175f99d9878"
+        }
+      ]
+    },
+    {
+      "name": "libchipcard",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/138/libchipcard-5.1.3beta.tar.gz",
+          "sha256": "11daac6e924f850162b51979cc9926fdd849d2b587aff518f755b3cc8448a592"
         }
       ]
     },
