@@ -6,10 +6,14 @@
       ],
       "cleanup": [
         "/share/info",
-        "/share/doc/*.qif",
-        "/share/doc/*.gnucash",
-        "/share/doc/ChangLog*",
-        "/share/doc/README*"
+        "/share/doc/gnucash/*.csv",
+        "/share/doc/gnucash/*.qif",
+        "/share/doc/gnucash/*.gnucash",
+        "/share/doc/gnucash/ChangeLog*",
+        "/share/doc/gnucash/HACKING",
+        "/share/doc/gnucash/README*",
+        "/share/doc/gnucash/guile-hackers.txt",
+        "/share/doc/gnucash/projects.html"
       ],
       "sources": [
         {
