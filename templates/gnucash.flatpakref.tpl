@@ -2,4 +2,4 @@
 Title=GnuCash
 Name=org.gnucash.GnuCash
 IsRuntime=false
-RuntimeRepo=https://sdk.gnome.org/gnome.flatpakrepo
+RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
