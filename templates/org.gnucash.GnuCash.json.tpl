@@ -11,7 +11,6 @@
   "finish-args": [
     "--socket=wayland",
     "--socket=x11",
-    "--socket=pcsc",
     "--share=ipc",
     "--share=network",
     "--filesystem=home",
