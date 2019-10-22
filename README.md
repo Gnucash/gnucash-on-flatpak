@@ -1,6 +1,6 @@
 # Build environment to build a flatpak version of GnuCash #
 
-This repository contains code to allow building a flatpak version of GnuCash.
+This repository contains code to allow building a [flatpak](https://flatpak.org/) version of GnuCash.
 
 Again: these packages are not release quality for several reasons:
 
@@ -35,22 +35,22 @@ flatpak/src
 ```
 
 2. Navigate into flatpak/src
-```
+```bash
 cd flatpak/src
 ```
 
 3. Clone this repo:
-```
+```bash
 git clone https://github.com/Gnucash/gnucash-on-flatpak gnucash-on-flatpak.git
 ```
 
 4. Clone the gnucash repo
-```
+```bash
 git clone https://github.com/Gnucash/gnucash gnucash.git
 ```
 
 5. Clone the gnucash-docs repo
-```
+```bash
 git clone https://github.com/Gnucash/gnucash-docs gnucash-docs.git
 ```
 
@@ -59,25 +59,26 @@ git clone https://github.com/Gnucash/gnucash-docs gnucash-docs.git
    a location other than the defaults).
 
 7. Navigate back to the base directory (flatpak in our set up)
-```
+```bash
 cd ..
 ```
 
 8. Build the flatpak using the build_package.sh command. If no options are set this command
 will build the maint branch of your gnucash and gnucash-docs repositories.
-```
+```bash
 ./src/gnucash-on-flatpak.git/build_package.sh
 ```
 
 9. On successful completion you will now have a flatpak repo named "repo" in the flatpak
-base directory. You can install and run gnucash from this directory using the typical flatpak
+base directory. You can **install** and **run** gnucash from this directory using the typical flatpak
 commands:
+```bash
+flatpak --user remote-add --no-gpg-verify gnc-testing-repo repo   # only once required
+flatpak --user install gnc-testing-repo org.gnucash.GnuCash       # after each build
+flatpak run org.gnucash.GnuCash                                   # as often as you like
+# or open a shell to use included comand line tools like 'aqbanking-cli':
+flatpak run --command=sh org.gnucash.GnuCash
 ```
-$ flatpak --user remote-add --no-gpg-verify gnc-testing-repo repo
-$ flatpak --user install gnc-testing-repo org.gnucash.GnuCash
-$ flatpak run org.gnucash.GnuCash
-```
-
 Note one has to specify --no-gpg-verify because the builds are not signed.
 
 ## Flatpak branches ##
@@ -110,13 +111,13 @@ For example
 ```
 
 With these long flatpak branch branch names it's possible to refer back exactly to the
-commits in the git repositories that were used to build this flatpak from. The commit
-hash refs are the bit after the -g. In the example above the code was built from commit
-a20a803c8 and the docs from commit c817132. The rest of the description give a relative
-indication of the freshness of each branch. "C3.2-290" means the code commit was 290 commits
-more recent than the 3.2 tag in the gnucash repository. "D3.2-21" means the docs commit was
-21 commits more recent than the 3.2 tag in the gnucash-docs repository. The exact numbers
-are not important. But C3.2-312 would be a more recent build than C3.2-290. So these
+commits in the git repositories that were used to build this flatpak from.
+* The **commit hash** refs are the bit after the -g. In the example above the code was built from commit
+a20a803c8 and the docs from commit c817132.
+* The rest of the description give a **relative indication** of the freshness of each branch:
+  * "C3.2-290" means the **code** commit was 290 commits more recent than the 3.2 tag in the gnucash repository.
+  * "D3.2-21" means the **docs** commit was 21 commits more recent than the 3.2 tag in the gnucash-docs repository.
+The exact numbers are not important. But C3.2-312 would be a more recent build than C3.2-290. So these
 numbers are used to sort builds by how recent they are (in terms of how recent the source
 is they were built from).
 
@@ -147,7 +148,7 @@ typically an http(s) url or if only for local use an absolute file:///path uri.
 If both gpg signing and remote repository are configured, the build script will automatically
 generate a gnucash-xyz.flatpakref file for each build. This file encapsulates all information
 to easily install a gnucash nightly flatpak in one single command:
-```
+```bash
 flatpak install --from gnucash-xyz.flatpakref
 ```
 This can only be set up if a GPG key and a public remote site are available.
@@ -189,4 +190,6 @@ flatpak environment.
 - properly handle release builds (should be run from release tarball)
 - try to build gnucash-docs as an extension instead of directly in the main flatpak
 
-
+# Further Readings #
+- [Flatpak’s documentation](http://docs.flatpak.org/en/latest/)
+- [Flathub App Submission](https://github.com/flathub/flathub/wiki/App-Submission)
