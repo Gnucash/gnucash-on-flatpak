@@ -19,7 +19,7 @@
         {
           "type": "git",
           "path": "${code_repodir}",
-          "branch": "${revision}"
+          "branch": "${code_revision}"
         }
       ]
     },
@@ -29,7 +29,7 @@
         {
           "type": "git",
           "path": "${docs_repodir}",
-          "branch": "${revision}"
+          "branch": "${docs_revision}"
         }
       ]
     }

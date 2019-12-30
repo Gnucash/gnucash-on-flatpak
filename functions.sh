@@ -10,15 +10,48 @@ function cleanup()
 function usage()
 {
   {
-    echo "Usage: $0 [-r <revision>] [-u <remote>]"
+    echo "Usage: $0 [-c <revision>] [-d <revision>] [-r <revision>]"
     echo "       $0 -h"
     echo
     echo "-h          display this help message"
     echo
+    echo "-c revision gnucash git revision to build. Can be a branch or a tag."
+    echo "            Default: whatever is set with -r or 'maint' if -' was not specified"
+    echo "-d revision gnucash-docs git revision to build. Can be a branch or a tag."
+    echo "            Default: whatever is set with -r or 'maint' if -' was not specified"
     echo "-r revision git revision to build. Can be a branch or a tag."
-    echo "            Note this branch or tag should exist in both the gnucash"
-    echo "            and the gnucash-docs repository used for this build."
+    echo "            Can be used in multiple ways: if -c or -d options are omitted"
+    echo "            the value of -r is used as default instead."
+    echo "            If both -c and -d refer to a release tag, the value of -r will be used"
+    echo "            additionally as name of the directory that holds the release tarballs"
+    echo "            on sourceforge. This allows to handle situations where this directory name"
+    echo "            is different from the release tarball versions."
     echo "            Default: 'maint'"
+    echo
+    echo "Examples:"
+    echo
+    echo "  $0 -r master"
+    echo
+    echo "    Create a development flatpak for the current master branches of gnucash and gnucash-docs"
+    echo
+    echo "  $0 -r 3.7"
+    echo
+    echo "    Create a release flatpak for the gnucash 3.7. This will look for tarballs on sourceforge"
+    echo "    for gnucash 3.7 and gnucash-docs 3.7 in directory 3.7"
+    echo
+    echo "  $0 -r 3.8 -c3.8b"
+    echo
+    echo "    Create a release flatpak with tarballs taken from sourceforge"
+    echo "    for gnucash 3.8 and gnucash-docs 3.8b in directory 3.8"
+    echo
+    echo "Note:"
+    echo "  If you want to create a release flatpak, you will always want to set at least -r."
+    echo "  That tells the scripts in which sourceforge directory to look for tarballs."
+    echo "  If the tarballs have slightly different version numbers (due to release process internals)"
+    echo "  you can add -c or -d to specify those."
+    echo "  For development builds (that is, from git) you are free to mix and match"
+    echo "  the 3 options as you see fit. In this case -r only serves as a default value"
+    echo "  for the other two."
   } 1>&2
   exit 1
 }
@@ -72,22 +105,33 @@ function upload_build_log()
   fi
 }
 
+# Updates repo to repo_rev
+# Then checks whether repo_rev is a tag
+# If not a tag, reset repo to repo_rev
+# Caller should pass repo_rev as first parameter
 function prepare_repo()
 {
+  repo_rev=$1
   pushd "${repodir}"
   echo "Update repository $repodir"
   git fetch
-  git checkout $revision
-  if git tag | grep -q "^$revision\$"
+  git checkout $repo_rev
+  if git tag | grep -q "^$repo_rev\$"
   then
     echo "Detected a tag (release) build"
-    is_release="yes"
-    remote_branch_dir="releases"
+    if [[ "${is_release}" == "no" ]]
+    then
+        echo "However a previously checked repository is not set up for release builds. Falling back to development build."
+        remote_branch_dir=$repo_rev
+    else
+        is_release="yes"
+        remote_branch_dir="releases"
+    fi
   else
     echo "No tag detected, assuming development build"
     is_release="no"
-    remote_branch_dir=$revision
-    git reset --hard origin/$revision
+    remote_branch_dir=$repo_rev
+    git reset --hard origin/$repo_rev
   fi
   popd
 }
@@ -112,8 +156,8 @@ function get_versions()
 function get_checksums()
 {
   wget "http://downloads.sourceforge.net/gnucash/gnucash (stable)/${revision}/README.txt" -O "${base_dir}"/README.txt
-  code_checksum=$(awk "/gnucash-${revision}.tar.bz2/ { print \$1;}" "${base_dir}"/README.txt)
-  docs_checksum=$(awk "/gnucash-docs-${revision}.tar.gz/ { print \$1;}" "${base_dir}"/README.txt)
+  code_checksum=$(awk "/gnucash-${code_revision}.tar.bz2/ { print \$1;}" "${base_dir}"/README.txt)
+  docs_checksum=$(awk "/gnucash-docs-${docs_revision}.tar.gz/ { print \$1;}" "${base_dir}"/README.txt)
 }
 
 function prepare_gpg()
@@ -144,7 +188,7 @@ function create_manifest()
   echo "Writing org.gnucash.GnuCash.json manifest file"
 
   # Export environment variables used in the templates in order for envsubst to find them
-  export code_repodir docs_repodir code_checksum docs_checksum revision
+  export code_repodir docs_repodir code_checksum docs_checksum revision code_revision docs_revision
 
   # In the functions below build_type selects the proper templates to initiate
   # a git or a tar build. build_type is determined earlier in build_package.sh
@@ -157,7 +201,7 @@ function create_manifest()
       # Note the variable names passed to envsubst:
       # this limits the set of variables envsubst will effectively substitute
       # We do this to prevent colisions with flatpak variables in the manifest
-      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $revision $code_checksum $docs_checksum' \
+      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $code_revision $docs_revision $revision $code_checksum $docs_checksum' \
                         < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl)
   fi
   export extra_deps gnucash_targets
