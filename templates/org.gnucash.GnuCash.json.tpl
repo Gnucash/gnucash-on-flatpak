@@ -292,8 +292,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/223/gwenhywfar-4.99.25rc9.tar.gz",
-          "sha256": "783eb770df1b62aa55ccc5a23d38403c0ca8d1a450901fc8c3697bf7013a9a93"
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/231/gwenhywfar-5.1.0.tar.gz",
+          "sha256": "ccdee7c7a0a5e1f3f55bab86a55d713acf20f0f80ef33a8abd0b69d29d8f9c2a"
         }
       ]
     },
@@ -302,8 +302,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/221/libchipcard-5.1.4rc1.tar.gz",
-          "sha256": "d93cbde9584d1f02f8d80cc76117a9d60506f873221bc5a3c788eec130cd2fd0"
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/229/libchipcard-5.1.5rc2.tar.gz",
+          "sha256": "32d2f8fe39f7ecb236c0cce2605333ebff47338435e0bfdaf1d8141f9bc79b7a"
         }
       ]
     },
@@ -313,8 +313,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/224/aqbanking-5.99.44beta.tar.gz",
-          "sha256": "abf1da7f4c0b6b83f7622351de4677bc4ec00b52a0cc9b2e556f14cfc743f2b1"
+          "url": "https://www.aquamaniac.de/rdm/attachments/download/232/aqbanking-5.99.45.tar.gz",
+          "sha256": "7e98f6eb817e6efe4a5f803af51781f7a6a8ae769a6c77ae324ed99033bd143f"
         }
       ]
     },
