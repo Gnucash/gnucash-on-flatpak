@@ -180,6 +180,46 @@ files for all the release builds
 by the various flatpakref files or can be used to manually add a flatpak remote to your local
 flatpak environment.
 
+## Repository maintenance ##
+
+Over time the local repo will start to accumulate plenty of branches and you
+may want to drop those you no longer use.
+
+There is no single command to do so. However as a flatpak repo is an ostree
+repo under the hood we can use ostree commands to clean up.
+
+The first step is to get an overview of branches in the repo
+```bash
+cd <repo>
+flatpak repo --branches .
+```
+
+This will list the names of all known branches in the repo. Each branch matches
+one build.
+
+Assume we want to remove all maint nightly builds for gnucash development
+between 3.3 and 3.4. All these builds will have `maint-C3.3` in their name.
+So let's use a bit of bash code to filter all the refs matching that pattern
+and delete them.
+
+```bash
+for ref in $(ostree refs | grep maint-C3.3)
+do
+    ostree refs --delete $ref
+done
+flatpak build-update-repo --prune .
+```
+
+What this does is call `ostree refs` and filter its output to only return the
+refs that match `maint-C3.3`. Then the found refs will be passed one by one
+to `ostree refs --delete` to remove it from the ostree repo. This is not enough
+however. We still have to tell flatpak to rebuild the list of available refs.
+That's what the last command does. Adding `--prune` will also have it clear
+orphaned objects from the repo. Compare that to compacting a mailbox file.
+
+So far only the (ostree) repo part has been cleaned up. You may want to do
+similar housekeeping for all the flatpakref files, buildlogs and manifests.
+
 ## Notes ##
 
 * The script will only build the packages if there are changes in the source
