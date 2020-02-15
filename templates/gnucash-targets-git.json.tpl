@@ -1,4 +1,4 @@
-    "modules/extra-deps-git.json",
+    "modules/swig.json",
     {
       "name": "gnucash",
       "buildsystem": "cmake-ninja",
