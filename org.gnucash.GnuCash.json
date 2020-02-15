@@ -32,6 +32,6 @@
     "modules/aqbanking.json",
     "modules/boost.json",
     "modules/googletest.json",
-${gnucash_targets}
+    "./gnucash.json"
   ]
 }

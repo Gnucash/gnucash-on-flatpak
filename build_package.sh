@@ -130,7 +130,8 @@ then
   echo "Uploading flatpak manifest 'org.gnucash.GnuCash-$fp_branch.json'"
   create_remote_dir "$host"/manifests
   create_remote_dir "$host"/manifests/$remote_branch_dir
-  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$host/manifests/$remote_branch_dir/org.gnucash.GnuCash-$fp_branch.json"
+  create_remote_dir "$host"/manifests/$remote_branch_dir/$fp_branch
+  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$fp_git_dir"/gnucash.json "$fp_git_dir"/modules "$host/manifests/$remote_branch_dir/$fp_branch"
 
   echo "Synchronizing flatpak repository"
   rsync -a $fp_repo "$host"

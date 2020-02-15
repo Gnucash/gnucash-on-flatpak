@@ -187,17 +187,10 @@ function create_manifest()
       # Note the variable names passed to envsubst:
       # this limits the set of variables envsubst will effectively substitute
       # We do this to prevent colisions with flatpak variables in the manifest
-      gnucash_targets=$(envsubst '$code_repodir $docs_repodir $code_revision $docs_revision $revision $code_checksum $docs_checksum' \
-                        < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl)
+      envsubst '$code_repodir $docs_repodir $code_revision $docs_revision $revision $code_checksum $docs_checksum' \
+                < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl \
+                > "$fp_git_dir"/gnucash.json
   fi
-  export gnucash_targets
-
-  # Note the variable names passed to envsubst:
-  # this limits the set of variables envsubst will effectively substitute
-  # We do this to prevent colisions with flatpak variables in the manifest
-  envsubst '$gnucash_targets' \
-           < "$fp_git_dir"/templates/org.gnucash.GnuCash.json.tpl \
-           > "$fp_git_dir"/org.gnucash.GnuCash.json
 }
 
 function setup_sdk()
