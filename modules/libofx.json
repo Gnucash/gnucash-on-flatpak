@@ -48,7 +48,7 @@
                 },
                 {
                     "type": "patch",
-                    "path": "../gengetopt-makefile.patch"
+                    "path": "../patches/gengetopt-makefile.patch"
                 },
                 {
                     "type": "script",
