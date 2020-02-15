@@ -1,3 +1,4 @@
+    "modules/extra-deps-git.json",
     {
       "name": "gnucash",
       "buildsystem": "cmake-ninja",

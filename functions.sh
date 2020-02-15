@@ -182,12 +182,6 @@ function create_manifest()
   # Export environment variables used in the templates in order for envsubst to find them
   export code_repodir docs_repodir code_checksum docs_checksum revision code_revision docs_revision
 
-  # In the functions below build_type selects the proper templates to initiate
-  # a git or a tar build. build_type is determined earlier in build_package.sh
-  extra_deps=
-  if [[ -f "$fp_git_dir"/templates/extra-deps-${build_type}.json.tpl ]]; then
-      extra_deps=$(cat "$fp_git_dir"/templates/extra-deps-${build_type}.json.tpl)
-  fi
   gnucash_targets=
   if [[ -f "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl ]]; then
       # Note the variable names passed to envsubst:
@@ -196,12 +190,12 @@ function create_manifest()
       gnucash_targets=$(envsubst '$code_repodir $docs_repodir $code_revision $docs_revision $revision $code_checksum $docs_checksum' \
                         < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl)
   fi
-  export extra_deps gnucash_targets
+  export gnucash_targets
 
   # Note the variable names passed to envsubst:
   # this limits the set of variables envsubst will effectively substitute
   # We do this to prevent colisions with flatpak variables in the manifest
-  envsubst '$extra_deps $gnucash_targets' \
+  envsubst '$gnucash_targets' \
            < "$fp_git_dir"/templates/org.gnucash.GnuCash.json.tpl \
            > "$fp_git_dir"/org.gnucash.GnuCash.json
 }

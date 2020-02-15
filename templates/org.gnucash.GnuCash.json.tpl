@@ -24,42 +24,7 @@
     "/lib/pkgconfig"
   ],
   "modules": [
-    {
-      "name": "gc",
-      "cleanup": [
-        "/share"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "http://www.hboehm.info/gc/gc_source/gc-8.0.4.tar.gz",
-          "sha256": "436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"
-        }
-      ]
-    },
-    {
-      "name": "libunistring",
-      "cleanup": [
-        "/share"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz",
-          "sha256": "eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7"
-        }
-      ]
-    },
-    {
-      "name": "guile",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://ftp.gnu.org/gnu/guile/guile-2.2.3.tar.xz",
-          "sha256": "8353a8849cd7aa77be66af04bd6bf7a6207440d2f8722e46672232bb9f0a4086"
-        }
-      ]
-    },
+    "modules/guile.json",
     {
       "name": "opensp",
       "rm-configure": true,
@@ -284,40 +249,7 @@
         }
       ]
     },
-    {
-      "name": "gwenhywfar",
-      "config-opts": [
-        "--with-guis='gtk3'"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/242/gwenhywfar-5.1.3.tar.gz",
-          "sha256": "19b4f80994db8e00812879f908b33195d61b807dbe7cd8dc3dd0104f524b5976"
-        }
-      ]
-    },
-    {
-      "name": "libchipcard",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/229/libchipcard-5.1.5rc2.tar.gz",
-          "sha256": "32d2f8fe39f7ecb236c0cce2605333ebff47338435e0bfdaf1d8141f9bc79b7a"
-        }
-      ]
-    },
-    {
-      "name": "aqbanking",
-      "no-parallel-make": true,
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://www.aquamaniac.de/rdm/attachments/download/243/aqbanking-6.0.2.tar.gz",
-          "sha256": "1d16f0a16ceb25ec7e8f8cfba6c21f64e18f5e4124f2144957958738fdb08158"
-        }
-      ]
-    },
+    "modules/aqbanking.json",
     {
       "name": "boost",
       "buildsystem": "simple",
@@ -346,7 +278,6 @@
         }
       ]
     },
-${extra_deps}
 ${gnucash_targets}
   ]
 }
