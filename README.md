@@ -243,26 +243,13 @@ the previous step will be inluded as source list of the finance-quote module.
 Keeping this separate allows us to easily update cpan dependencies in the future
 without interfering with other parts of the manifest.
 
-Step 2 was not without issues and it took me a while to successfully create
-the snippet. In short: the current flatpak-builder-tools cpan generator is
-fairly fragile.
-- It will fail to include certain modules (those that don't write
-an insallation line to perllocal.pod during installation). This happens for example
-with the `HTML::Tree` module
-- the entry found in perllocal.pod can't be mapped back to the module's distribution
-name in some cases, like with the `Date::Parse` module. It's distribution name is
-TimeDate, and the current script errors out on this.
+Expressed in simple commands:
 
-Long story short, my github fork https://github.com/gjanssens/flatpak-builder-tools
-has patches that allowed me to proceed. I have offered them upstream for inclusion.
-
-From there I:
-
-- installed the required perl modules on my (Fedora) system using
+- install the required perl modules on my (Fedora) system using
 `sudo dnf install 'perl(App::cpanminus)' 'perl(Getopt::Long::Descriptive)' 'perl(JSON::MaybeXS)' 'perl(LWP::UserAgent)' 'perl(MetaCPAN::Client)' 'perl(Pod::Simple::SimpleTree)'`
 as mentioned on the flatpak-builder-tools page
-- ran `./flatpak-cpan-generator.pl Date::Manip Finance::Quote`
-- copied the resulting `generated-sources.json` to `modules/finance-quote-sources.json`
+- run `./flatpak-cpan-generator.pl Date::Manip Finance::Quote`
+- copy the resulting `generated-sources.json` to `modules/finance-quote-sources.json`
 
 Note I have found the script to be not very version control friendly:
 `generated-sources.json` will change a lot between runs. It will have the exact same
