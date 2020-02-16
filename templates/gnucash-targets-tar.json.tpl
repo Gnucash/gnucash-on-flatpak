@@ -28,6 +28,7 @@
         },
         {
             "name": "gnucash-docs",
+            "buildsystem": "cmake-ninja",
             "sources": [
                 {
                     "type": "archive",
