@@ -225,9 +225,53 @@ similar housekeeping for all the flatpakref files, buildlogs and manifests.
 * The script will only build the packages if there are changes in the source
   repositories since the last build.
 
+## Finance::Quote ##
+
+Flatpaks don't ship perl, nor cpan. So enabling Finance::Quote support requires
+adding build rules for all of these in the flatpak manifest. This is a short
+summary of how this was done.
+
+1. Use https://github.com/flathub/io.github.Hexchat.Plugin.Perl/blob/master/io.github.Hexchat.Plugin.Perl.json
+as an example project to get perl built in flatpak. Note this cleans way
+too much of the perl installation (including the perl executable which we still need).
+
+2. Use https://github.com/flatpak/flatpak-builder-tools/tree/master/cpan to generate
+a manifest snippet with build for all the cpan modules required for Finance::Quote
+
+3. Add perl and finance-quote modules to our manifest. The snippet generated in
+the previous step will be inluded as source list of the finance-quote module.
+Keeping this separate allows us to easily update cpan dependencies in the future
+without interfering with other parts of the manifest.
+
+Step 2 was not without issues and it took me a while to successfully create
+the snippet. In short: the current flatpak-builder-tools cpan generator is
+fairly fragile.
+- It will fail to include certain modules (those that don't write
+an insallation line to perllocal.pod during installation). This happens for example
+with the `HTML::Tree` module
+- the entry found in perllocal.pod can't be mapped back to the module's distribution
+name in some cases, like with the `Date::Parse` module. It's distribution name is
+TimeDate, and the current script errors out on this.
+
+Long story short, my github fork https://github.com/gjanssens/flatpak-builder-tools
+has patches that allowed me to proceed. I have offered them upstream for inclusion.
+
+From there I:
+
+- installed the required perl modules on my (Fedora) system using
+`sudo dnf install 'perl(App::cpanminus)' 'perl(Getopt::Long::Descriptive)' 'perl(JSON::MaybeXS)' 'perl(LWP::UserAgent)' 'perl(MetaCPAN::Client)' 'perl(Pod::Simple::SimpleTree)'`
+as mentioned on the flatpak-builder-tools page
+- ran `./flatpak-cpan-generator.pl Date::Manip Finance::Quote`
+- copied the resulting `generated-sources.json` to `modules/finance-quote-sources.json`
+
+Note I have found the script to be not very version control friendly:
+`generated-sources.json` will change a lot between runs. It will have the exact same
+sources and dependencies, but they are shuffled around. Experiments indicate this is
+already due to the way cpanminus handles dependency resolution. The order in which
+same-level dependencies are processed is not stable. A minor annoyance I can live with
+for now.
+
 ## TODO ##
-- add finance::quote support
-- properly handle release builds (should be run from release tarball)
 - try to build gnucash-docs as an extension instead of directly in the main flatpak
 
 # Further Readings #
