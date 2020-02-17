@@ -177,19 +177,35 @@ function prepare_gpg()
 
 function create_manifest()
 {
-  echo "Writing org.gnucash.GnuCash.json manifest file"
+  echo "Configuring org.gnucash.GnuCash.json manifest module files"
 
   # Export environment variables used in the templates in order for envsubst to find them
   export code_repodir docs_repodir code_checksum docs_checksum revision code_revision docs_revision
 
-  gnucash_targets=
-  if [[ -f "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl ]]; then
-      # Note the variable names passed to envsubst:
-      # this limits the set of variables envsubst will effectively substitute
-      # We do this to prevent colisions with flatpak variables in the manifest
-      envsubst '$code_repodir $docs_repodir $code_revision $docs_revision $revision $code_checksum $docs_checksum' \
-                < "$fp_git_dir"/templates/gnucash-targets-${build_type}.json.tpl \
-                > "$fp_git_dir"/gnucash.json
+  # Note we explicitly pass a number of variable names to envsubst in
+  # the commands below. This limits the set of variables envsubst will
+  # effectively substitute
+  # We do this to prevent colisions with flatpak variables in the manifest
+  # and module files
+
+  rm -f "$fp_git_dir"/gnucash-source.json
+  if [[ -f "$fp_git_dir"/templates/gnucash-source-${build_type}.json.tpl ]]; then
+      envsubst '$code_repodir $code_revision $revision $code_checksum' \
+                < "$fp_git_dir"/templates/gnucash-source-${build_type}.json.tpl \
+                > "$fp_git_dir"/gnucash-source.json
+  fi
+
+  rm -f "$fp_git_dir"/gnucash-docs-source.json
+  if [[ -f "$fp_git_dir"/templates/gnucash-docs-source-${build_type}.json.tpl ]]; then
+      envsubst '$docs_repodir $docs_revision $revision $docs_checksum' \
+                < "$fp_git_dir"/templates/gnucash-docs-source-${build_type}.json.tpl \
+                > "$fp_git_dir"/gnucash-docs-source.json
+  fi
+
+  rm -f "$fp_git_dir"/gnucash-extra-modules.json
+  if [[ -f "$fp_git_dir"/templates/gnucash-extra-modules-${build_type}.json.tpl ]]; then
+      cp "$fp_git_dir"/templates/gnucash-extra-modules-${build_type}.json.tpl \
+         "$fp_git_dir"/gnucash-extra-modules.json
   fi
 }
 

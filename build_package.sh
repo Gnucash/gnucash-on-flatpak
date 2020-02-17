@@ -131,7 +131,12 @@ then
   create_remote_dir "$host"/manifests
   create_remote_dir "$host"/manifests/$remote_branch_dir
   create_remote_dir "$host"/manifests/$remote_branch_dir/$fp_branch
-  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json "$fp_git_dir"/gnucash.json "$fp_git_dir"/modules "$host/manifests/$remote_branch_dir/$fp_branch"
+  rsync -a "$fp_git_dir"/org.gnucash.GnuCash.json \
+           "$fp_git_dir"/gnucash-source.json \
+           "$fp_git_dir"/gnucash-docs-source.json \
+           "$fp_git_dir"/gnucash-extra-modules.json \
+           "$fp_git_dir"/modules \
+           "$host/manifests/$remote_branch_dir/$fp_branch"
 
   echo "Synchronizing flatpak repository"
   rsync -a $fp_repo "$host"

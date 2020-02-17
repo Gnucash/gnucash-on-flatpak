@@ -2,4 +2,6 @@ custom.sh
 code_last_rev
 docs_last_rev
 gnucash-flatpak.gpg
-gnucash.json
+gnucash-docs-source.json
+gnucash-extra-modules.json
+gnucash-source.json
