@@ -130,7 +130,12 @@ function prepare_repo()
   else
     echo "No tag detected, assuming development build"
     is_release="no"
-    remote_branch_dir=$repo_rev
+    # This function is run twice - once for code once for docs
+    # Only set remote_branch_dir if not yet set (in other words code's setting takes precedence)
+    if [[ -z $remote_branch_dir ]]
+    then
+      remote_branch_dir=$repo_rev
+    fi
     git reset --hard origin/$repo_rev
   fi
   popd
