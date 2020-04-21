@@ -15,8 +15,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.26.tar.gz",
-                    "sha256": "8d8276c9c720ca42a3b0023df8b7ae41a2d6c5f9aa8d20ed1672d84cc8982d50"
+                    "url": "https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.29.tar.gz",
+                    "sha256": "b1d1deba966019930f608d1f2b95c40ca3450f1393bcd3a3c001a8ba1d2839ab"
                 }
             ]
         },
