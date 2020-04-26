@@ -152,7 +152,7 @@ function get_versions()
 
 function get_checksums()
 {
-  wget "http://downloads.sourceforge.net/gnucash/gnucash (stable)/${revision}/README.txt" -O "${base_dir}"/README.txt
+  wget "http://downloads.sourceforge.net/gnucash/gnucash (unstable)/${revision}/README.txt" -O "${base_dir}"/README.txt
   code_checksum=$(awk "/gnucash-${code_revision}.tar.bz2/ { print \$1;}" "${base_dir}"/README.txt)
   docs_checksum=$(awk "/gnucash-docs-${docs_revision}.tar.gz/ { print \$1;}" "${base_dir}"/README.txt)
 }
