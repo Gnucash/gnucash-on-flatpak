@@ -172,7 +172,8 @@ flatpak environment.
 Over time the local repo will start to accumulate plenty of branches and you
 may want to drop those you no longer use.
 
-There is no single command to do so. However as a flatpak repo is an ostree
+There is no single command to do so. However as a flatpak repo is an
+[ostree](https://en.wikipedia.org/wiki/OSTree)
 repo under the hood we can use ostree commands to clean up.
 
 The first step is to get an overview of branches in the repo
@@ -277,3 +278,4 @@ rather than 3.8.
 # Further Readings #
 - [Flatpak’s documentation](http://docs.flatpak.org/en/latest/)
 - [Flathub App Submission](https://github.com/flathub/flathub/wiki/App-Submission)
+- [OSTree Documentation](https://ostree.readthedocs.io/en/latest/)
