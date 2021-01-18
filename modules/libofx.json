@@ -8,8 +8,8 @@
     "sources": [
         {
             "type": "archive",
-            "url": "https://github.com/libofx/libofx/archive/0.9.15.tar.gz",
-            "sha256": "74a9370da560526424ab62d79f7301f86620a8566c3f38cfc4684e63a4aac155"
+            "url": "https://github.com/libofx/libofx/archive/0.10.0.tar.gz",
+            "sha256": "f11f46d91573e7d0964eb796c4dcaa33218ede8319b77b817356cf54aaa7bbcc"
         }
     ],
     "modules": [
