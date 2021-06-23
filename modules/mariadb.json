@@ -1,9 +1,17 @@
 {
     "name": "mariadb-connector-c",
     "buildsystem": "cmake",
-    "no-make-install": true,
     "config-opts": [
-        "-DCMAKE_BUILD_TYPE=Release"
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DINSTALL_BINDIR=bin",
+        "-DINSTALL_LIBDIR=lib",
+        "-DINSTALL_INCLUDEDIR=include",
+        "-DINSTALL_PLUGINDIR=lib/mariadb/plugin",
+        "-DINSTALL_PCDIR=lib/pkgconfig"
+    ],
+    "post-install": [
+        "ln -s /app/bin/mariadb_config /app/bin/mysql_config",
+        "ln -s /app/lib/libmariadb.so.3 /app/lib/libmysqlclient.so"
     ],
     "sources": [
         {
