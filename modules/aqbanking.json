@@ -55,8 +55,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aquamaniac.de/rdm/attachments/download/229/libchipcard-5.1.5rc2.tar.gz",
-                    "sha256": "32d2f8fe39f7ecb236c0cce2605333ebff47338435e0bfdaf1d8141f9bc79b7a"
+                    "url": "https://aquamaniac.de/rdm/attachments/download/382/libchipcard-5.1.6.tar.gz",
+                    "sha256": "6c07f527417f7562074f99012da4d11eb4dbafd33f49e66b442ccd6e3b8cfd20"
                 }
             ]
         }
