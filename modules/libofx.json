@@ -10,10 +10,6 @@
             "type": "archive",
             "url": "https://github.com/libofx/libofx/archive/refs/tags/0.10.3.tar.gz",
             "sha256": "fe07cfd895fd79dcb9f45ca80a90ceaf1ebcc3b43b7e6d3fd7c3b2ae3bd8ba9e"
-        },
-        {
-            "type": "patch",
-            "path": "../patches/libofx-subtract-gmt-offset.patch"
         }
     ],
     "modules": [
