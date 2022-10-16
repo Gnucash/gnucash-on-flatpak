@@ -265,7 +265,9 @@ incorporate all changes made here as well with a few exceptions:
   - gnucash-source.json
   - gnucash-docs-source.json
   - gnucash-extra-modules.json
-  In the flathub source repository these are checked in source files.
+
+In the flathub source repository these are checked in source files.
+
 - the org.gnucash.GnuCash.json file is tweaked in the flathub source repository to
   - pass a GNUCASH_BUILD_ID to the build and
   - to override the gnucash.releases.xml file.
