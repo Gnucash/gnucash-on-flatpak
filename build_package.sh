@@ -35,8 +35,9 @@ revision=maint
 
 . "$fp_git_dir"/functions.sh
 
+is_release="undecided"
 # Parse command line options
-while getopts "hr:c:d:" o; do
+while getopts "hr:c:d:i:" o; do
     case "${o}" in
         r)
             revision=${OPTARG}
@@ -50,13 +51,15 @@ while getopts "hr:c:d:" o; do
         h)
             usage
             ;;
+        i)
+            is_release=${OPTARG}
+            ;;
         *)
             usage
             ;;
     esac
 done
 
-is_release="undecided"
 code_revision=${code_revision:-${revision}}
 docs_revision=${docs_revision:-${revision}}
 
@@ -78,23 +81,25 @@ upload_build_log
 trap cleanup ERR
 
 # Check for new commits in code
-package=${code_package}
-repodir=${code_repodir}
-prepare_repo ${code_revision}
-get_versions
+if [[ "x${is_release}" != "xyes" ]]; then
+    package=${code_package}
+    repodir=${code_repodir}
+    prepare_repo ${code_revision}
+    get_versions
 
-code_curr_rev=${gc_commit}
-code_full_version=${gc_full_version}
+
+    code_curr_rev=${gc_commit}
+    code_full_version=${gc_full_version}
 
 # Check for new commits in docs
-package=${docs_package}
-repodir=${docs_repodir}
-prepare_repo ${docs_revision}
-get_versions
+    package=${docs_package}
+    repodir=${docs_repodir}
+    prepare_repo ${docs_revision}
+    get_versions
 
-docs_curr_rev=${gc_commit}
-docs_full_version=${gc_full_version}
-
+    docs_curr_rev=${gc_commit}
+    docs_full_version=${gc_full_version}
+fi
 # Compose the default branch name to use in the flatpak repo
 fp_branch="$revision-C$code_full_version-D$docs_full_version"
 
