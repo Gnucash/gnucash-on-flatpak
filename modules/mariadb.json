@@ -1,32 +1,23 @@
 {
-    "name": "mariadb",
+    "name": "mariadb-connector-c",
     "buildsystem": "cmake",
-    "no-make-install": true,
     "config-opts": [
-        "-DBUILD_CONFIG=mysql_release",
-        "-DWITH_INNOBASE_STORAGE_ENGINE=1",
-        "-DWITHOUT_ARCHIVE_STORAGE_ENGINE=1",
-        "-DWITHOUT_BLACKHOLE_STORAGE_ENGINE=1",
-        "-DWITHOUT_PARTITION_STORAGE_ENGINE=1",
-        "-DWITHOUT_TOKUDB=1",
-        "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1",
-        "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1",
-        "-DWITHOUT_PBXT_STORAGE_ENGINE=1"
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DINSTALL_BINDIR=bin",
+        "-DINSTALL_LIBDIR=lib",
+        "-DINSTALL_INCLUDEDIR=include",
+        "-DINSTALL_PLUGINDIR=lib/mariadb/plugin",
+        "-DINSTALL_PCDIR=lib/pkgconfig"
     ],
     "post-install": [
-        "make -C libmysql install",
-        "make -C include install",
-        "install -Dm755 scripts/mysql_config /app/bin/mysql_config",
-        "install -Dm644 support-files/mariadb.pc /app/share/pkgconfig/mariadb.pc"
-    ],
-    "cleanup": [
-        "/bin/"
+        "ln -s /app/bin/mariadb_config /app/bin/mysql_config",
+        "ln -s /app/lib/libmariadb.so.3 /app/lib/libmysqlclient.so"
     ],
     "sources": [
         {
             "type": "archive",
-            "url": "http://ftp.hosteurope.de/mirror/archive.mariadb.org/mariadb-10.1.32/source/mariadb-10.1.32.tar.gz",
-            "sha256": "0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096"
+            "url": "https://github.com/mariadb-corporation/mariadb-connector-c/archive/refs/tags/v3.2.7.tar.gz",
+            "sha256": "3c91df959d61cf64957faf633569ccd78e207abd600a2907081845fa47dff5ee"
         }
     ],
     "modules": [
@@ -39,8 +30,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/jemalloc/jemalloc/releases/download/5.0.1/jemalloc-5.0.1.tar.bz2",
-                    "sha256": "4814781d395b0ef093b21a08e8e6e0bd3dab8762f9935bbfb71679b0dea7c3e9"
+                    "url": "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2",
+                    "sha256": "34330e5ce276099e2e8950d9335db5a875689a4c6a56751ef3b1d8c537f887f6"
                 }
             ]
         },

@@ -226,25 +226,35 @@ too much of the perl installation (including the perl executable which we still 
 2. Use https://github.com/flatpak/flatpak-builder-tools/tree/master/cpan to generate
 a manifest snippet with build for all the cpan modules required for Finance::Quote
 
-3. Add perl and finance-quote modules to our manifest. The snippet generated in
+3. flatpak-cpan-generator.pl is not consistently ordering the sources and build rules
+between runs, which would cause a lot of clutter in our git history. To partially
+alleviate this, sort the sources alphabetically using the jq tool.
+
+4. Add perl and finance-quote modules to our manifest. The snippet generated in
 the previous step will be inluded as source list of the finance-quote module.
 Keeping this separate allows us to easily update cpan dependencies in the future
 without interfering with other parts of the manifest.
 
 Expressed in simple commands:
 
-- install the required perl modules on my (Fedora) system using
+- install the required perl modules and jq tool using (example for Fedora linux)
 `sudo dnf install 'perl(App::cpanminus)' 'perl(Getopt::Long::Descriptive)' 'perl(JSON::MaybeXS)' 'perl(LWP::UserAgent)' 'perl(MetaCPAN::Client)' 'perl(Pod::Simple::SimpleTree)'`
-as mentioned on the flatpak-builder-tools page
-- run `./flatpak-cpan-generator.pl Date::Manip Finance::Quote`
-- copy the resulting `generated-sources.json` to `modules/finance-quote-sources.json`
+- run
+```
+./flatpak-cpan-generator.pl Date::Manip Finance::Quote
+cat generated-sources.json | jq -S 'sort_by(.dest)' > generated-sources-sorted.json
+cp generated-sources-sorted.json modules/finance-quote-sources.json
+```
 
-Note I have found the script to be not very version control friendly:
-`generated-sources.json` will change a lot between runs. It will have the exact same
-sources and dependencies, but they are shuffled around. Experiments indicate this is
+Note even though passing the result through jq results in a deterministic sorting in
+alphabetical order of the sources, the build rules still move around between runs
+of the flatpak-cpan-generator.pl script.
+While slightly annoying it's not really blocking. This means the git history has
+some noise in the 'make-install' lines, but we can use the differences in the
+sources to properly track changes.
+For the record, experiments indicate this is
 already due to the way cpanminus handles dependency resolution. The order in which
-same-level dependencies are processed is not stable. A minor annoyance I can live with
-for now.
+same-level dependencies are processed is not stable.
 
 ## Flathub ##
 
@@ -255,7 +265,9 @@ incorporate all changes made here as well with a few exceptions:
   - gnucash-source.json
   - gnucash-docs-source.json
   - gnucash-extra-modules.json
-  In the flathub source repository these are checked in source files.
+
+In the flathub source repository these are checked in source files.
+
 - the org.gnucash.GnuCash.json file is tweaked in the flathub source repository to
   - pass a GNUCASH_BUILD_ID to the build and
   - to override the gnucash.releases.xml file.

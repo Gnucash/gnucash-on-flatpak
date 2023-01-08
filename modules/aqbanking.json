@@ -5,8 +5,8 @@
     "sources": [
         {
             "type": "archive",
-            "url": "https://www.aquamaniac.de/rdm/attachments/download/328/aqbanking-6.2.1.tar.gz",
-            "sha256": "bab601bf7c3402912438aa2919cd84d498a65749238214fcf881d2a2cfea1fd4"
+            "url": "https://www.aquamaniac.de/rdm/attachments/download/467/aqbanking-6.5.3.tar.gz",
+            "sha256": "6c62bf26aa42e69b21e188b54f6a5d825d6da34de1a14cbc3b67d85a9705136e"
         }
     ],
     "modules": [
@@ -15,8 +15,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.29.tar.gz",
-                    "sha256": "b1d1deba966019930f608d1f2b95c40ca3450f1393bcd3a3c001a8ba1d2839ab"
+                    "url": "https://github.com/lsh123/xmlsec/archive/refs/tags/xmlsec-1_2_32.tar.gz",
+                    "sha256": "e33e551fb9f6da5576b1a55ce962048adf337332c27e6be9dba04d360b6a5584"
                 }
             ]
         },
@@ -45,8 +45,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aquamaniac.de/rdm/attachments/download/319/gwenhywfar-5.3.0.tar.gz",
-                    "sha256": "3aec5982f5e136761863f4b6b12bbb4cd26b8ffb5f7553b58a48f72b6a4344a9"
+                    "url": "https://www.aquamaniac.de/rdm/attachments/download/465/gwenhywfar-5.10.1.tar.gz",
+                    "sha256": "a2f60a9dde5da27e57e0e5ef5f8931f495c1d541ad90a841e2b6231565547160"
                 }
             ]
         },
@@ -55,8 +55,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aquamaniac.de/rdm/attachments/download/229/libchipcard-5.1.5rc2.tar.gz",
-                    "sha256": "32d2f8fe39f7ecb236c0cce2605333ebff47338435e0bfdaf1d8141f9bc79b7a"
+                    "url": "https://aquamaniac.de/rdm/attachments/download/382/libchipcard-5.1.6.tar.gz",
+                    "sha256": "6c07f527417f7562074f99012da4d11eb4dbafd33f49e66b442ccd6e3b8cfd20"
                 }
             ]
         }
