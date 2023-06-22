@@ -31,7 +31,7 @@ docs_repodir="${docs_repodir:=$default_docs_repodir}"
 fp_repo=${fp_repo=$default_fp_repo}
 
 # Preset defaults for options that can be passed via the command line
-revision=maint
+revision=stable
 
 . "$fp_git_dir"/functions.sh
 
