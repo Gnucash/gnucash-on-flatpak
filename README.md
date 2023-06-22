@@ -224,7 +224,9 @@ as an example project to get perl built in flatpak. Note this cleans way
 too much of the perl installation (including the perl executable which we still need).
 
 2. Use https://github.com/flatpak/flatpak-builder-tools/tree/master/cpan to generate
-a manifest snippet with build for all the cpan modules required for Finance::Quote
+a manifest snippet with build for all the cpan modules required for
+Finance::Quote (Get it with `curl -o flatpak-cpan-generator.pl
+https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/cpan/flatpak-cpan-generator.pl`. 
 
 3. flatpak-cpan-generator.pl is not consistently ordering the sources and build rules
 between runs, which would cause a lot of clutter in our git history. To partially
@@ -238,12 +240,15 @@ without interfering with other parts of the manifest.
 Expressed in simple commands:
 
 - install the required perl modules and jq tool using (example for Fedora linux)
-`sudo dnf install 'perl(App::cpanminus)' 'perl(Getopt::Long::Descriptive)' 'perl(JSON::MaybeXS)' 'perl(LWP::UserAgent)' 'perl(MetaCPAN::Client)' 'perl(Pod::Simple::SimpleTree)'`
+`sudo dnf install 'perl(App::cpanminus)' 'perl(Getopt::Long::Descriptive)' 'perl(JSON::MaybeXS)' 'perl(LWP::UserAgent)' 'perl(MetaCPAN::Client)' 'perl(Capture::Tiny)'`
+(example for Debian/Ubuntu) `sudo apt install jq cpanminus
+libgetopt-long-descriptive-perl libjson-maybexs-perl
+liblwp-useragent-determined-perl libmetacpan-client-perl libcapture-tiny-perl`
 - run
 ```
-./flatpak-cpan-generator.pl Date::Manip Finance::Quote
-cat generated-sources.json | jq -S 'sort_by(.dest)' > generated-sources-sorted.json
-cp generated-sources-sorted.json modules/finance-quote-sources.json
+./flatpak-cpan-generator.pl JSON::Parse Finance::Quote
+jq -S 'sort_by(.dest)' generated-sources.json > modules/finance-quote-sources.json
+git commit -am "Update Finance::Quote and dependencies"
 ```
 
 Note even though passing the result through jq results in a deterministic sorting in
