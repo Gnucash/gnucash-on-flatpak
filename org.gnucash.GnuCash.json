@@ -14,6 +14,8 @@
     "--share=ipc",
     "--share=network",
     "--filesystem=host",
+    "--talk-name=org.gtk.vfs.*",
+    "--filesystem=xdg-run/gvfs",
     "--device=dri",
     "--metadata=X-DConf=migrate-path=/org/gnucash/GnuCash/"
   ],
