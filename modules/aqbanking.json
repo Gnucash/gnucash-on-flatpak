@@ -5,8 +5,8 @@
     "sources": [
         {
             "type": "archive",
-            "url": "https://www.aquamaniac.de/rdm/attachments/download/514/aqbanking-6.5.8beta.tar.gz",
-            "sha256": "924b653dedfbcbeb18bbbaf4ecbe341cff90370d28f2339cf1811353c78b61b5"
+            "url": "https://www.aquamaniac.de/rdm/attachments/download/524/aqbanking-6.5.11beta.tar.gz",
+            "sha256": "5d0551abdacb2b887b92d79d178df600eb152997678605a9d775217315b07693"
         }
     ],
     "modules": [
