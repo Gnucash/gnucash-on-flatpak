@@ -5,8 +5,8 @@
     "sources": [
         {
             "type": "archive",
-            "url": "https://www.aquamaniac.de/rdm/attachments/download/499/aqbanking-6.5.4.tar.gz",
-            "sha256": "0d16ceae76f0718e466638f4547a8b14927f1d8d98322079cd6481adde30ac99"
+            "url": "https://www.aquamaniac.de/rdm/attachments/download/524/aqbanking-6.5.11beta.tar.gz",
+            "sha256": "5d0551abdacb2b887b92d79d178df600eb152997678605a9d775217315b07693"
         }
     ],
     "modules": [
@@ -45,8 +45,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aquamaniac.de/rdm/attachments/download/501/gwenhywfar-5.10.2.tar.gz",
-                    "sha256": "60a7da03542865501208f20e18de32b45a75e3f4aa8515ca622b391a2728a9e1"
+                    "url": "https://www.aquamaniac.de/rdm/attachments/download/518/gwenhywfar-5.11.2beta.tar.gz",
+                    "sha256": "e7f2b12c092d6f598f29e255b0b003d98ac1796c85b73a570890dbf2dcf35b24"
                 }
             ]
         },
