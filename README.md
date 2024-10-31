@@ -51,7 +51,7 @@ cd ..
 ```
 
 8. Build the flatpak using the build_package.sh command. If no options are set this command
-will build the maint branch of your gnucash and gnucash-docs repositories.
+will build the stable branch of your gnucash and gnucash-docs repositories.
 ```bash
 ./src/gnucash-on-flatpak.git/build_package.sh
 ```
@@ -71,7 +71,7 @@ Note one has to specify --no-gpg-verify because the builds are not signed.
 ## Flatpak branches ##
 
 The build script will try to avoid double work. For that it will check the commit hashes
-for the given revision (maint by default if no revision is passed to the build script).
+for the given revision (stable by default if no revision is passed to the build script).
 If a build already exists for the combination of the gnucash and gnucash-docs commit hashes
 no new build will be started.
 
@@ -86,7 +86,7 @@ For example
 ```
 /app/org/gnucash.GnuCash/x86_64/3.2
 ```
-For non-release builds (like from 'maint') the branch name will be based on the git branch name
+For non-release builds (like from 'stable') the branch name will be based on the git branch name
 and git descriptions of the respective commits. The git descriptions are obtained using the
 **git describe** command. So the full branch name becomes
 ```
@@ -94,7 +94,7 @@ and git descriptions of the respective commits. The git descriptions are obtaine
 ```
 For example
 ```
-/app/org/gnucash.GnuCash/x86_64/maint-C3.2-290-ga20a803c8-D3.2-21-gc817132
+/app/org/gnucash.GnuCash/x86_64/stable-C3.2-290-ga20a803c8-D3.2-21-gc817132
 ```
 
 With these long flatpak branch branch names it's possible to refer back exactly to the
@@ -185,13 +185,13 @@ flatpak repo --branches .
 This will list the names of all known branches in the repo. Each branch matches
 one build.
 
-Assume we want to remove all maint nightly builds for gnucash development
-between 3.3 and 3.4. All these builds will have `maint-C3.3` in their name.
+Assume we want to remove all stable nightly builds for gnucash development
+between 3.3 and 3.4. All these builds will have `stable-C5.6` in their name.
 So let's use a bit of bash code to filter all the refs matching that pattern
 and delete them.
 
 ```bash
-for ref in $(ostree refs | grep maint-C3.3)
+for ref in $(ostree refs | grep stable-C5.6)
 do
     ostree refs --delete $ref
 done
@@ -199,7 +199,7 @@ flatpak build-update-repo --prune .
 ```
 
 What this does is call `ostree refs` and filter its output to only return the
-refs that match `maint-C3.3`. Then the found refs will be passed one by one
+refs that match `stable-C5.6`. Then the found refs will be passed one by one
 to `ostree refs --delete` to remove it from the ostree repo. This is not enough
 however. We still have to tell flatpak to rebuild the list of available refs.
 That's what the last command does. Adding `--prune` will also have it clear
