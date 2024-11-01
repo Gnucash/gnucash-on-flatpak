@@ -48,6 +48,18 @@
                     "url": "https://www.aquamaniac.de/rdm/attachments/download/518/gwenhywfar-5.11.2beta.tar.gz",
                     "sha256": "e7f2b12c092d6f598f29e255b0b003d98ac1796c85b73a570890dbf2dcf35b24"
                 }
+            ],
+            "modules": [
+                {
+                    "name": "libgcrypt",
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.3.tar.bz2",
+                            "sha256": "8b0870897ac5ac67ded568dcfadf45969cfa8a6beb0fd60af2a9eadc2a3272aa"
+                        }
+                    ]
+                }
             ]
         },
         {
