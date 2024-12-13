@@ -20,6 +20,13 @@
             "sha256": "3346b3f09edb2c2464422560ff783f7a7fa1fcd287427f0a8f2db8a1d995acb9"
         },
         {
+            "type": "patch",
+            "paths": [
+                "../patches/libdbi-link-map.patch",
+                "../patches/libdbi-drivers-cgreen-tests-constraint-test-type.patch"
+                ]
+        },
+        {
             "type": "shell",
             "commands": [
                 "rm -f config.guess"
@@ -39,6 +46,10 @@
                     "type": "archive",
                     "url": "http://downloads.sourceforge.net/gnucash/libdbi-0.9.1.tar.gz",
                     "sha256": "870c81447e45ea7f02379dec91ca53f0a28c2438cf88bb3a6491fb4db30db528"
+                },
+                {
+                    "type": "patch",
+                    "path": "../patches/libdbi-link-map.patch"
                 },
                 {
                     "type": "shell",
