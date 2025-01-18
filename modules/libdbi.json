@@ -22,7 +22,6 @@
         {
             "type": "patch",
             "paths": [
-                "../patches/libdbi-link-map.patch",
                 "../patches/libdbi-drivers-cgreen-tests-constraint-test-type.patch"
                 ]
         },
@@ -49,7 +48,7 @@
                 },
                 {
                     "type": "patch",
-                    "path": "../patches/libdbi-link-map.patch"
+                    "path": "../patches/libdbi-no-version-script.patch"
                 },
                 {
                     "type": "shell",
