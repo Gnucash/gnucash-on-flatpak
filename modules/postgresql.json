@@ -10,6 +10,9 @@
         "/bin",
         "/share"
     ],
+    "build-options": {
+        "cflags": "-std=c11"
+    },
     "sources": [
         {
             "type": "archive",
