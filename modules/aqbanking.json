@@ -2,26 +2,12 @@
 {
     "name": "aqbanking",
     "no-parallel-make": true,
-    "rm-configure": true,
     "sources": [
         {
             "type": "archive",
-            "url": "https://www.aquamaniac.de/rdm/attachments/download/627/aqbanking-6.8.0.tar.gz",
-            "sha256": "4428857b00514d8781b09be2c23442ad657e213fbd09f49040e47c6d568a01f7"
-        },
-	{
-            "type": "patch",
-            "paths": [
-                "../patches/aqbanking-6.8.0-cli-Makefile.patch"
-                ]
-        },
-	{
-	    "type": "script",
-	    "commands": [
-		"autoreconf -fi"
-	    ]
-	}
- 
+            "url": "https://www.aquamaniac.de/rdm/attachments/download/634/aqbanking-6.8.2.tar.gz",
+            "sha256": "10b14c92d76ff13652e00b5c496001601f0d9465c5acb1b1b682d451022406ec"
+        } 
     ],
     "modules": [
         {
@@ -60,16 +46,9 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.aquamaniac.de/rdm/attachments/download/626/gwenhywfar-5.14.0.tar.gz",
-                    "sha256": "85b1e711dcab1911f70ba9e6f8696b4b0b7134cbec66c57c5bf1122ec1284bfb"
-                },
-		{
-		    "type": "patch",
-		    "paths": [
-			"../patches/gwenhywfar-5.14.0-w_hsplitter.patch"
-                    ]
-		}
- 
+                    "url": "https://www.aquamaniac.de/rdm/attachments/download/630/gwenhywfar-5.14.1.tar.gz",
+                    "sha256": "8916feaa99cb954f963f2cba8dd2dffe57cacf7f284daf00eab071aad6fe2ab3"
+                } 
             ],
             "modules": [
                 {
