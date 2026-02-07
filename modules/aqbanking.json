@@ -41,7 +41,7 @@
             "name": "gwenhywfar",
             "config-opts": [
                 "--with-guis='gtk3'",
-                "GPGRT_CONFIG=/app/bin/gpgrt-config"
+                "GPGRT_CONFIG=/usr/bin/gpgrt-config"
             ],
             "sources": [
                 {
@@ -49,30 +49,6 @@
                     "url": "https://www.aquamaniac.de/rdm/attachments/download/630/gwenhywfar-5.14.1.tar.gz",
                     "sha256": "8916feaa99cb954f963f2cba8dd2dffe57cacf7f284daf00eab071aad6fe2ab3"
                 } 
-            ],
-            "modules": [
-                {
-                    "name": "libgcrypt",
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.11.1.tar.bz2",
-                            "sha256": "24e91c9123a46c54e8371f3a3a2502f1198f2893fbfbf59af95bc1c21499b00e"
-                        }
-                    ],
-                    "modules": [
-                        {
-                            "name": "libgpg-error",
-                            "sources": [
-                                {
-                                    "type": "archive",
-                                    "url": "https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.55.tar.bz2",
-                                    "sha256": "95b178148863f07d45df0cea67e880a79b9ef71f5d230baddc0071128516ef78"
-                                }
-                            ]
-                        }
-                    ]
-                }
             ]
         },
         {
