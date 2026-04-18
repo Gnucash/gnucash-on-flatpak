@@ -24,7 +24,13 @@
     "*.a",
     "*.la",
     "/include",
-    "/lib/pkgconfig"
+    "/lib/cmake",
+    "/lib/pkgconfig",
+    "/man",
+    "/share/aclocal",
+    "/share/doc",
+    "/share/info",
+    "/share/man"    
   ],
   "modules": [
     "modules/guile.json",
