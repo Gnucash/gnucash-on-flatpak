@@ -129,6 +129,12 @@ sub main {
       "        echo 'No Makefile.PL or Build.PL found. Do not know how to install this module'",
       "        exit 1",
       "    fi",
+      "    if [ -f 'LICENSE' ]; then",
+      "       install -Dm644 LICENSE -t \${FLATPAK_DEST}/share/licenses/\${FLATPAK_ID}/\${mod_dir}/",
+      "    fi",
+      "    if [ -f 'COPYING' ]; then",
+      "       install -Dm644 COPYING -t \${FLATPAK_DEST}/share/licenses/\${FLATPAK_ID}/\${mod_dir}/",
+      "    fi",
       "}",
       "cp -R perl-libs/Finance-Quote/Examples \${FLATPAK_DEST}/share/finance-quote",
        map { "(make_install $_->{dest})" } @sources
