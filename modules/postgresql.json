@@ -1,14 +1,14 @@
 {
     "name": "postgresql",
     "no-make-install": true,
+    "license-files": [ "COPYRIGHT"],
     "post-install": [
         "make -C src/include install",
         "make -C src/interfaces install",
         "make -C src/bin/pg_config install"
     ],
     "cleanup": [
-        "/bin",
-        "/share"
+        "/bin"
     ],
     "build-options": {
         "cflags": "-std=c11"

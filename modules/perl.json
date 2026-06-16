@@ -26,6 +26,7 @@
                     ]
                 }
             ],
+            "license-files":["Copying", "Artistic"],
             "post-install": [
                 "chmod -R u+w /app/lib/perl5"
             ]

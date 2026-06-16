@@ -14,22 +14,22 @@
     "modules": [
         {
             "name": "gc",
-            "cleanup": [
-                "/share"
-            ],
             "sources": [
                 {
                     "type": "archive",
                     "url": "http://www.hboehm.info/gc/gc_source/gc-8.0.4.tar.gz",
                     "sha256": "436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"
                 }
+            ],
+            "post-install": [
+                "head -n16 finalize.c > LICENSE",
+                "install -Dm644 LICENSE -t $FLATPAK_DEST/share/licenses/$FLATPAK_ID/gc/"
+
             ]
         },
         {
             "name": "libunistring",
-            "cleanup": [
-                "/share"
-            ],
+            "license-files": ["COPYING"],
             "sources": [
                 {
                     "type": "archive",
