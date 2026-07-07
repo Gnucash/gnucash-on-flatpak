@@ -28,7 +28,6 @@
     "/lib/pkgconfig",
     "/man",
     "/share/aclocal",
-    "/share/doc",
     "/share/info",
     "/share/man"    
   ],
