@@ -136,7 +136,7 @@ function prepare_repo()
     then
       remote_branch_dir=$repo_rev
     fi
-    git reset --hard $repo_rev
+    git reset --hard origin/$repo_rev
   fi
   popd
 }
