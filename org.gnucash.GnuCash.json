@@ -44,6 +44,19 @@
     "modules/swig.json",
     "./gnucash-extra-modules.json",
     {
+	"name": "fontconfig-reject-woff",
+	"buildsystem": "simple",
+	"build-commands": [
+	    "install -Dm644 reject-woff.conf /app/etc/fonts/local.conf"
+	],
+	"sources": [
+	    {
+		"type": "file",
+		"path": "reject-woff.conf"
+	    }
+	]
+    },
+    {
         "name": "gnucash",
         "buildsystem": "cmake-ninja",
         "config-opts": [
