@@ -46,8 +46,13 @@ sub get_url_sha256 {
 }
 sub get_source_for_dep {
   my ($cpan, $dep, $outdir) = @_;
-  my $release_set = $cpan->release({ name => $dep });
-
+  my $release_set;
+  for (my $retries = 0; $retries < 5; $retries++)
+  {
+      $release_set = $cpan->release({ name => $dep });
+      last if $release_set->total == 1;
+      print "Retrying ", $dep, "...\n";
+  }
   die "Unexpected @{[$release_set->total]} releases for $dep"
     if $release_set->total != 1;
   my $release = $release_set->next;
