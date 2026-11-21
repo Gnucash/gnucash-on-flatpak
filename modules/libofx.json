@@ -5,6 +5,11 @@
         "--with-opensp-includes=/app/include/OpenSP",
         "--with-opensp-libs=/lib"
     ],
+    "build-opttions": {
+        "env": {
+            "CXX_FLAGS": "-std=cxx17"
+        }
+    }
     "sources": [
         {
             "type": "archive",
