@@ -7,9 +7,9 @@
     ],
     "build-opttions": {
         "env": {
-            "CXX_FLAGS": "-std=cxx17"
+            "CXX_FLAGS": "-std=c++17"
         }
-    }
+    },
     "sources": [
         {
             "type": "archive",
