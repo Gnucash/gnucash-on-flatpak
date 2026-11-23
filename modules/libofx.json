@@ -6,9 +6,7 @@
         "--with-opensp-libs=/lib"
     ],
     "build-opttions": {
-        "env": {
-            "CXX_FLAGS": "-std=c++17"
-        }
+        "cxxflags": "-std=c++17"
     },
     "sources": [
         {
