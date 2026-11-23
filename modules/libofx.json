@@ -5,7 +5,7 @@
         "--with-opensp-includes=/app/include/OpenSP",
         "--with-opensp-libs=/lib"
     ],
-    "build-opttions": {
+    "build-options": {
         "cxxflags": "-std=c++17"
     },
     "sources": [
